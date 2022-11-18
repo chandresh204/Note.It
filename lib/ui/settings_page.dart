@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:note_it/ui/backup_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,10 +56,12 @@ class _SettingsPageState extends State<SettingsPage> {
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   const Text('Backup information goes here'),
                                   ElevatedButton(onPressed: () {
                                     prepareNotesInJson();
+                                    Navigator.pop(context);
                                   },
                                       child: const Text('Next'))
                                 ]
@@ -68,9 +69,6 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           );
                         });
-                        Navigator.push(context, MaterialPageRoute(builder: (ctx) {
-                          return const BackupPage();
-                        }));
                       },
                       child: Row(
                         children: const [
@@ -84,7 +82,25 @@ class _SettingsPageState extends State<SettingsPage> {
                   padding: const EdgeInsets.all(8),
                   child: ElevatedButton(
                       onPressed: () {
-                        _restoreNotes();
+                  //      _restoreNotes();
+                        showDialog(context: context, builder: (ctx) {
+                          return Dialog(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text('Backup information goes here'),
+                                    ElevatedButton(onPressed: () {
+                                      _restoreNotes();
+                                      Navigator.pop(context);
+                                    },
+                                        child: const Text('Next'))
+                                  ]
+                              ),
+                            ),
+                          );
+                        });
                       },
                       child: Row(
                         children: const [
