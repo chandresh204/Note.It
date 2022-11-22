@@ -279,9 +279,13 @@ class _EditPageState extends State<EditPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-     child: Text(
-       textToEdit,
-       style: TextStyle(fontSize: MyTheme.primaryFontSize),
+     child: ListView(
+       children: [
+         Text(
+           textToEdit,
+           style: TextStyle(fontSize: MyTheme.primaryFontSize),
+         ),
+       ]
      ),
      /*   child: Text(
           textToEdit,

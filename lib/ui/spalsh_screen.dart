@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:in_app_update/in_app_update.dart';
 import '../main.dart';
 import '../themes/theme.dart';
 import 'home_page.dart';
@@ -12,9 +13,13 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
+  AppUpdateInfo? _updateInfo;
+
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 4), () {
+    checkForUpdate();
+    Future.delayed(const Duration(seconds: 2), () {
       if (!MyApp.appReady) {
         MyApp.appReady = true;
         MyApp.of(context)!.changeTheme(
@@ -42,6 +47,15 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       )
     );
+  }
 
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      print('update availability ${_updateInfo?.updateAvailability}');
+      if (_updateInfo?.updateAvailability ==
+          UpdateAvailability.updateAvailable) {
+        InAppUpdate.startFlexibleUpdate();
+      }
+    });
   }
 }

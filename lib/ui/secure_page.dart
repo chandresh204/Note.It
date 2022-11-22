@@ -50,6 +50,7 @@ class _SecurePageState extends State<SecurePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Note.it - Secure'),
+        backgroundColor: MyTheme.selectedColorScheme.primary,
         actions: [
           IconButton(onPressed: () {
             _showPasswordChangeDialog(0);
@@ -60,6 +61,7 @@ class _SecurePageState extends State<SecurePage> {
         child: getListUI(allNotes),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: MyTheme.selectedColorScheme.primary,
         onPressed: () {
           _gotoEditPage(-1);
         },
