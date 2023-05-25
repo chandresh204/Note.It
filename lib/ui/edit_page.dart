@@ -19,30 +19,35 @@ class EditPage extends StatefulWidget {
   State<EditPage> createState() => _EditPageState();
 }
 
-class _EditPageState extends State<EditPage> {
+class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin {
+
   String textToEdit = "";
   bool inReadOnlyMode = false;
+  late AnimationController aController;
+  int animationDuration = 500;
 
   @override
   void initState() {
     super.initState();
+    aController = AnimationController(vsync: this, duration: Duration(milliseconds: animationDuration));
     if (widget.editId > 0) {
       _getFromDatabase();
       inReadOnlyMode = true;
     }
+    aController.forward();
   }
 
   _initializeDatabase() {
     final database = $FloorNoteDatabase.databaseBuilder(MyApp.DB_NAME);
     database.build().then((value) {
       widget.noteDao = value.noteDao;
-  //    print('noteDao now available in edit mode');
+      //    print('noteDao now available in edit mode');
     });
   }
 
   _getFromDatabase() {
     if (widget.noteDao == null) {
-   //   print('noteDao not available, getting');
+      //   print('noteDao not available, getting');
       final database = $FloorNoteDatabase.databaseBuilder(MyApp.DB_NAME);
       database.build().then((value) {
         widget.noteDao = value.noteDao;
@@ -75,10 +80,26 @@ class _EditPageState extends State<EditPage> {
 
   _saveToDatabase(Note note) {
     widget.noteDao?.insertOneNote(note);
- //   print('new note inserted or updated');
+    //   print('new note inserted or updated');
   }
 
-  Future<bool> _onWillPop() async{
+  Future<bool> _onWillPop() async {
+    if(inReadOnlyMode == false && _textEditingController.text.isNotEmpty) {
+      showGeneralDialog(context: context,
+          pageBuilder: (ctx, a1, a2) => Container(),
+          transitionBuilder: (ctx, a1, a2, child) {
+            return MyTheme.getSelectedDialogTransition(a1, _backPressAlertDialog(ctx));
+          },
+          transitionDuration: Duration(milliseconds: (MyTheme.animationTiming * MyTheme.animationDialogTimingConst).toInt())
+      );
+      return false;
+    } else {
+      Navigator.pop(context, true);
+      return true;
+    }
+  }
+
+  /* Future<bool> _onWillPop() async{
     return (await showDialog(
         context: context,
         builder: (context) {
@@ -102,50 +123,69 @@ class _EditPageState extends State<EditPage> {
             Navigator.pop(context,true);
             return const Text('Exit');
           }
-        })) ?? false;
+        }));
+  } */
+
+  Widget _backPressAlertDialog(BuildContext ctx) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(MyTheme.dialogCornerRadius)
+      ),
+      title: const Text('Save Changes?'),
+      actions: [
+        ElevatedButton(onPressed: () {
+          Navigator.pop(ctx, true);
+          Navigator.pop(ctx, true);
+        }, child: const Text('Discard')),
+        ElevatedButton(onPressed: () {
+          _saveNoteAndExit(widget.isEncrypted);
+          Navigator.pop(ctx, true);
+        }, child: const Text('Save')),
+        ElevatedButton(onPressed: () {
+          Navigator.pop(ctx, false);
+        }, child: const Text('Cancel')),
+      ],
+      actionsAlignment: MainAxisAlignment.center,
+    );
   }
 
   Widget _getEditingUI() {
+    Color appBarForeground = MyTheme.selectedColorScheme.onPrimary;
+    aController.forward();
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
         backgroundColor: _getBackgroundColor(),
         appBar: AppBar(
+          foregroundColor: appBarForeground,
           backgroundColor: MyTheme.selectedColorScheme.primary,
-            title: const Text(
-          'Note.it',),
+          title: const Text(
+            'Note.it - Editor',),
           actions: [
-            IconButton(onPressed: () {
-              showMenu(
-                  context: context,
-                  position: RelativeRect.fromDirectional(
-                      textDirection: TextDirection.ltr,
-                      start: 1500,
-                      top: 50,
-                      end: 0,
-                      bottom: 0),
-                  items: [
+            PopupMenuButton(
+                itemBuilder: (ctx) {
+                  return [
                     PopupMenuItem(
-                        child: const Text('Paste'),
-                        onTap: () {
-                          Clipboard.getData('text/plain').then((cData) {
-                            if (cData?.text != null) {
-                              _textEditingController.text = cData!.text!;
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
+                      child: const Text('Paste'),
+                      onTap: () {
+                        Clipboard.getData('text/plain').then((cData) {
+                          if (cData?.text != null) {
+                            _textEditingController.text = cData!.text!;
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Clipboard empty'))
-                              );
-                            }
+                            );
                           }
-                          );
-                        },),
+                        }
+                        );
+                      },),
                     PopupMenuItem(
                       child: const Text('Copy all'),
                       onTap: () {
                         Clipboard.setData(ClipboardData(text: _textEditingController.text)).then(
-                            (c) {
+                                (c) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Copied to Clipboard'))
+                                  const SnackBar(content: Text('Copied to Clipboard'))
                               );
                             }
                         );
@@ -165,32 +205,38 @@ class _EditPageState extends State<EditPage> {
                       onTap: () {
                         _saveNoteAndExit(widget.isEncrypted);
                       },),
-                  ]
-              );
-            }, icon: const Icon(Icons.menu)),
+                  ];
+                }),
             Container(width: 10,)
           ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Expanded(
-                child:  TextField(
-                  style: TextStyle(fontSize: MyTheme.primaryFontSize),
-                  maxLines: null,
-                  expands: true,
-                  keyboardType: TextInputType.multiline,
-                  controller: _textEditingController,
+          child: SizeTransition(
+            axisAlignment: -1,
+            sizeFactor: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(parent: aController, curve: Curves.easeInExpo)
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  child:  TextField(
+                    style: TextStyle(fontSize: MyTheme.primaryFontSize, color: _getTextColor()),
+                    maxLines: null,
+                    expands: true,
+                    keyboardType: TextInputType.multiline,
+                    controller: _textEditingController,
+                  ),
                 ),
-              ),
-              Container(
-                height: 80,
-              )
-            ],
+                Container(
+                  height: 80,
+                )
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
+          foregroundColor: appBarForeground,
           onPressed: () {
             _saveNoteAndExit(widget.isEncrypted);
           },
@@ -210,15 +256,15 @@ class _EditPageState extends State<EditPage> {
         _saveToDatabase(updatedNote);
       } else {
         var updatedNote = Note(widget.editId,
-          _textEditingController.text, thisTime, false);
+            _textEditingController.text, thisTime, false);
         _saveToDatabase(updatedNote);
       }
     } else {
       if (widget.isEncrypted) {
         var newNote = Note(thisTime,
             EncDec.getEncryptedText(_textEditingController.text),
-          thisTime,
-          true);
+            thisTime,
+            true);
         _saveToDatabase(newNote);
       } else {
         var newNote = Note(thisTime, _textEditingController.text, thisTime, false);
@@ -229,80 +275,87 @@ class _EditPageState extends State<EditPage> {
   }
 
   Widget _getReadOnlyUI() {
+    ScrollController controller = ScrollController();
+    Color appBarForeground = MyTheme.selectedColorScheme.onPrimary;
     return Scaffold(
       backgroundColor: _getBackgroundColor(),
       appBar: AppBar(
+        foregroundColor: appBarForeground,
         backgroundColor: MyTheme.selectedColorScheme.basicColor,
-        title: const Text('View/Edit Note'),
+        title: const Text('Note.It - Read Only'),
         actions: [
-          IconButton(
-              onPressed: () {
-                showMenu(
-                    context: context, 
-                    position: RelativeRect.fromDirectional(
-                        textDirection: TextDirection.ltr,
-                        start: 1500,
-                        top: 50,
-                        end: 0,
-                        bottom: 0),
-                    items: [
-                      PopupMenuItem(
-                          child: const Text('Copy all'),
-                        onTap: () {
-                            Clipboard.setData(
-                               ClipboardData(text: textToEdit));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Copied to clipboard'))
-                            );
-                        },
-                      ),
-                      PopupMenuItem(
-                        child: const Text('Share'),
-                        onTap: () {
-                          Share.share(textToEdit);
-                        },
-                      ),
-                      PopupMenuItem(
-                        child: const Text('Edit'),
-                        onTap: () {
-                          setState(() {
-                            inReadOnlyMode = false;
-                            _textEditingController.text = textToEdit;
-                          });
-                        },
-                      ),
-                    ]);
-              },
-              icon: const Icon(Icons.menu)),
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  child: const Text('Copy all'),
+                  onTap: () {
+                    Clipboard.setData(
+                        ClipboardData(text: textToEdit));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Copied to clipboard'))
+                    );
+                  },
+                ),
+                PopupMenuItem(
+                  child: const Text('Share'),
+                  onTap: () {
+                    Share.share(textToEdit);
+                  },
+                ),
+                PopupMenuItem(
+                  child: const Text('Edit'),
+                  onTap: () {
+                    setState(() {
+                      inReadOnlyMode = false;
+                      _textEditingController.text = textToEdit;
+                    });
+                  },
+                ),
+              ];
+            },
+          ),
           Container(width: 10,)
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-     child: ListView(
-       children: [
-         Text(
-           textToEdit,
-           style: TextStyle(fontSize: MyTheme.primaryFontSize),
-         ),
-       ]
-     ),
-     /*   child: Text(
-          textToEdit,
-          style: TextStyle(
-            fontSize: MyTheme.primaryFontSize,
+      body: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: SizeTransition(
+          axisAlignment: -1,
+          sizeFactor: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(parent: aController, curve: Curves.easeInExpo)),
+          child: ListView(
+              controller: controller,
+              physics: const BouncingScrollPhysics(),
+              children: [
+                const SizedBox(height: 10),
+                Text(
+                  textToEdit,
+                  style: TextStyle(fontSize: MyTheme.primaryFontSize, color: _getTextColor()),
+                ),
+                const SizedBox(height: 100)
+              ]
           ),
-        ),  */
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            inReadOnlyMode = false;
-            _textEditingController.text = textToEdit;
-          });
-        },
-        backgroundColor: MyTheme.selectedColorScheme.primary,
-        child: const Icon(Icons.edit),
+      floatingActionButton: RotationTransition(
+        turns: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(parent: aController, curve: Curves.bounceOut)
+        ),
+        child: FloatingActionButton(
+          foregroundColor: appBarForeground,
+          onPressed: () {
+            aController.reverse();
+            Future.delayed(Duration(milliseconds: animationDuration), () {
+              setState(() {
+                inReadOnlyMode = false;
+                _textEditingController.text = textToEdit;
+              });
+            });
+          },
+          backgroundColor: MyTheme.selectedColorScheme.primary,
+          child: const Icon(Icons.edit),
+        ),
       ),
     );
   }
@@ -322,5 +375,13 @@ class _EditPageState extends State<EditPage> {
       return MyTheme.selectedColorScheme.primaryDark;
     }
     return MyTheme.selectedColorScheme.primaryLight;
+  }
+
+  Color _getTextColor() {
+    Color bgColor = _getBackgroundColor();
+    if ((bgColor.red + bgColor.green + bgColor.blue) < 420) {
+      return Colors.white;
+    }
+    return Colors.black;
   }
 }

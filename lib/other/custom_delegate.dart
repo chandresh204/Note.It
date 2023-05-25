@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../custome_widgets/note_in_list.dart';
+import '../custome_widgets/note_in_list2.dart';
 import '../data/note.dart';
 import '../data/note_dao.dart';
 
@@ -53,7 +53,29 @@ class CustomSearchDelegate extends SearchDelegate {
   }
 
   Widget getListUI(List<Note> notes) {
-    final ui = NoteInList(notes, context, noteDao, notifyParent);
-    return ui.getListUI();
+    return NoteInList2(
+        notesToShow: notes,
+        noteDao: noteDao,
+        notifyParent: notifyParent);
+  }
+
+  Future<Widget> testFunction() async {
+    var lastQuery = query;
+    // wait for query change
+    for(int i=0; i<3; i++) {
+      await Future.delayed(const Duration(seconds: 1), () { });
+    }
+    if(lastQuery == query) {
+      List<Note> matchNotes = [];
+      for (var note in allNotes) {
+        if (note.note.toLowerCase().contains(query.toLowerCase())) {
+          matchNotes.add(note);
+        }
+      }
+      return getListUI(matchNotes);
+    } else {
+      print('$lastQuery skipped');
+      return const CircularProgressIndicator();
+    }
   }
 }

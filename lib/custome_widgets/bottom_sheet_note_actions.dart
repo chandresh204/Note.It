@@ -45,9 +45,9 @@ class BottomSheetNoteOptions {
                       ),
                       child: Row(
                         children: const [
-                          Icon(Icons.delete),
+                          Icon(Icons.delete, color: Colors.white,),
                           Padding(padding: EdgeInsets.all(4.0)),
-                          Text('Delete')
+                          Text('Delete', style: TextStyle(color: Colors.white),)
                         ],
                       ),
                     ),
@@ -117,9 +117,9 @@ class BottomSheetNoteOptions {
                             });
                           },
                           child: Row(children: const [
-                            Icon(Icons.check),
+                            Icon(Icons.check, color: Colors.white),
                             Padding(padding: EdgeInsets.all(4.0)),
-                            Text('Delete'),
+                            Text('Delete', style: TextStyle(color: Colors.white),),
                           ]),
                         ),
                       ),

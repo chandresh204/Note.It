@@ -5,18 +5,21 @@ import 'color.dart';
 
 class MyTheme {
 
+  static const appVersion = 8.0;
   static const colorDiff = 50;
   static Color colorDefault = const Color(0xffffad76);
-  static Color colorRed = const Color(0xffca0020);
-  static Color colorBlue = const Color(0xff197cff);
-  static Color colorGreen = const Color(0xff02881e);
+  static Color colorRed = const Color(0xffff3d41);
+  static Color colorBlue = const Color(0xff25ceef);
+  static Color colorGreen = const Color(0xff63ac5d);
   static Color colorGrey = const Color(0xffb5b5b5);
   static Color colorBlue1 = const Color(0xff276b8e);
   static Color colorPink = const Color(0xffd64389);
   static Color colorPurple = const Color(0xffa23cab);
   static Color colorGreenLight = const Color(0xff00ffab);
   static Color colorBlack = const Color(0xff222222);
+  static Color colorLemon = const Color(0xffcfce78);
 
+  static late MyColor myCustomColor;
   static late MyColor myColorDefault;
   static late MyColor myColorRed;
   static late MyColor myColorBlue;
@@ -27,7 +30,9 @@ class MyTheme {
   static late MyColor myColorPurple;
   static late MyColor myColorGreenLight;
   static late MyColor myColorBlack;
+  static late MyColor myColorLemon;
 
+  static const int colorId0 = 0;
   static const int colorId1 = 1;
   static const int colorId2 = 2;
   static const int colorId3 = 3;
@@ -38,6 +43,7 @@ class MyTheme {
   static const int colorId8 = 8;
   static const int colorId9 = 9;
   static const int colorId10 = 10;
+  static const int colorId11 = 11;
 
   static var isGettingFromPrefs = true;
   static var isDarkMode = false;
@@ -48,13 +54,32 @@ class MyTheme {
   static const String fontPreferenceString = 'fontInPrefs';
   static const String textSizePreferenceString = 'textSizeInPrefs';
   static const String securePasswordPrefString = 'secureNotes';
+  static const String animationPrefString = 'animationInPrefs';
+  static const String animationDialogPrefString = 'dialogAnimationInPrefs';
+  static const String animationTimePrefString = 'animationTimeInPrefs';
+  static const String myColorPrimaryRedPref = 'myColorPrimaryRed';
+  static const String myColorPrimaryGreenPref = 'myColorPrimaryGreen';
+  static const String myColorPrimaryBluePref = 'myColorPrimaryBlue';
+  static const String myColorLightRedPrefs = 'myColorLightRed';
+  static const String myColorLightGreenPrefs = 'myColorLightGreen';
+  static const String myColorLightBluePrefs = 'myColorLightBlue';
+  static const String myColorDarkRedPrefs = 'myColorDarkRed';
+  static const String myColorDarkGreenPrefs = 'myColorDarkGreen';
+  static const String myColorDarkBluePrefs = 'myColorDarkBlue';
 
   static var selectedColorScheme = myColorDefault;
   static var selectedFonts = 'Default';
+  static var selectedAnimation = 'None';
+  static var selectedDialogAnimation = 'Dialog Slide Elastic';
   static var primaryFontSize = 18.0;
   static const fontMultiplier = 0.3;
-  static var smallFontSize = primaryFontSize - (primaryFontSize * fontMultiplier);
-  static var largeFontSize = primaryFontSize + (primaryFontSize * fontMultiplier);
+  static const dialogCornerRadius = 16.0;
+  static var animationTiming = 800;
+  static const animationDialogTimingConst = 0.5;
+  static var smallFontSize =
+      primaryFontSize - (primaryFontSize * fontMultiplier);
+  static var largeFontSize =
+      primaryFontSize + (primaryFontSize * fontMultiplier);
 
   //list of fonts
   static const fontRaleway = 'Raleway';
@@ -81,6 +106,29 @@ class MyTheme {
   static const fontZenOldMincho = 'ZenOldMincho';
   static const fontDefault = 'Default';
 
+  //list of animations for note tiles
+  static const animationNone = 'None';
+  static const animationSlideIn = 'Slide In';
+  static const animationSlideBounce = 'Slide Bounce';
+  static const animationSlideElastic = 'Slide Elastic';
+  static const animationFade = 'Fade';
+  static const animationZoom = 'Zoom';
+  static const animationPop = 'Pop';
+  static const animationZoomOut = 'Zoom Out';
+  static const animationFallDown = 'Fall down';
+  static const animationFlying = 'Flying';
+
+  //list of animation for dialog
+  static const dialogAnimationNone = 'None';
+  static const dialogAnimationSlideIn = 'Dialog Slide in';
+  static const dialogAnimationSlideElastic = 'Dialog Slide Elastic';
+  static const dialogAnimationRotate = 'Dialog Rotate';
+  static const dialogAnimationFade = 'Dialog Fade';
+  static const dialogAnimationZoomIn = 'Dialog Zoom';
+  static const dialogAnimationPop = 'Dialog Pop';
+  static const dialogAnimationZoomOut = 'Dialog Zoom Out';
+  static const dialogAnimationLanding = 'Dialog Landing';
+
   static initializeColors() async {
     myColorDefault = createMyColor(colorId1, colorDefault);
     myColorRed = createMyColor(colorId2, colorRed);
@@ -92,7 +140,31 @@ class MyTheme {
     myColorPurple = createMyColor(colorId8, colorPurple);
     myColorGreenLight = createMyColor(colorId9, colorGreenLight);
     myColorBlack = createMyColor(colorId10, colorBlack);
+    myColorLemon = MyColor(colorId11, colorLemon,
+      createMaterialColor(colorLemon),
+      const Color.fromARGB(255, 163, 212, 250),
+      const Color.fromARGB(255, 151, 47, 136),
+      Colors.black);
     final prefs = await SharedPreferences.getInstance();
+    int primaryRed = prefs.getInt(myColorPrimaryRedPref) ?? 125;
+    int primaryGreen = prefs.getInt(myColorPrimaryGreenPref) ?? 206;
+    int primaryBlue = prefs.getInt(myColorPrimaryBluePref) ?? 120;
+    int lightRed = prefs.getInt(myColorLightRedPrefs) ?? 162;
+    int lightGreen = prefs.getInt(myColorLightGreenPrefs) ?? 212;
+    int lightBlue = prefs.getInt(myColorLightBluePrefs) ?? 250;
+    int darkRed = prefs.getInt(myColorDarkRedPrefs) ?? 151;
+    int darkGreen = prefs.getInt(myColorDarkGreenPrefs) ?? 46;
+    int darkBlue = prefs.getInt(myColorDarkBluePrefs) ?? 135;
+    var basicColor = Color.fromARGB(255, primaryRed, primaryGreen, primaryBlue);
+    myCustomColor = MyColor(
+        0,
+        basicColor,
+        createMaterialColor(basicColor),
+        Color.fromARGB(255, lightRed, lightGreen, lightBlue),
+        Color.fromARGB(255, darkRed, darkGreen, darkBlue),
+        ((basicColor.red + basicColor.green + basicColor.blue < 420))
+            ? Colors.white
+            : Colors.black);
     final darkValueInPrefs = prefs.getBool(isDarkModePrefString);
     if (darkValueInPrefs == null) {
       isDarkMode = false;
@@ -101,6 +173,11 @@ class MyTheme {
     }
     final colorIdInPrefs = prefs.getInt(colorIdPrefsString);
     switch (colorIdInPrefs) {
+      case colorId0:
+        {
+          selectedColorScheme = myCustomColor;
+        }
+        break;
       case colorId1:
         {
           selectedColorScheme = myColorDefault;
@@ -151,6 +228,11 @@ class MyTheme {
           selectedColorScheme = myColorBlack;
         }
         break;
+      case colorId11:
+        {
+          selectedColorScheme = myColorLemon;
+        }
+        break;
       default:
         {
           selectedColorScheme = myColorDefault;
@@ -174,8 +256,26 @@ class MyTheme {
     } else {
       securePassword = '';
     }
+    final animationString = prefs.getString(animationPrefString);
+    if (animationString == null || animationString.isEmpty) {
+      MyTheme.selectedAnimation = MyTheme.animationSlideElastic;
+    } else {
+      MyTheme.selectedAnimation = animationString;
+    }
+    final dialogAnimationString = prefs.getString(animationDialogPrefString);
+    if (dialogAnimationString == null || dialogAnimationString.isEmpty) {
+      MyTheme.selectedDialogAnimation = MyTheme.dialogAnimationSlideIn;
+    } else {
+      MyTheme.selectedDialogAnimation = dialogAnimationString;
+    }
+    final animationTime1 = prefs.getInt(animationTimePrefString);
+    if (animationTime1 == null || animationTime1.isNaN) {
+      animationTiming = 500;
+    } else {
+      animationTiming = animationTime1;
+    }
     isGettingFromPrefs = false;
- //   print('theme data updated from prefs');
+    //   print('theme data updated from prefs');
   }
 
   static setAllFonts(double primaryValue) {
@@ -183,6 +283,7 @@ class MyTheme {
     smallFontSize = primaryFontSize - (primaryFontSize * fontMultiplier);
     largeFontSize = primaryFontSize + (primaryFontSize * fontMultiplier);
   }
+
   static MaterialColor createMaterialColor(Color color) {
     List strengths = <double>[.05];
     final swatch = <int, Color>{};
@@ -203,11 +304,18 @@ class MyTheme {
     return MaterialColor(color.value, swatch);
   }
 
-  static MyColor createMyColor(int id,Color color) {
-    return  MyColor(id, color, createMaterialColor(color),
+  static MyColor createMyColor(int id, Color color) {
+    return MyColor(
+        id,
+        color,
+        createMaterialColor(color),
         changeColor(color, colorDiff),
-        changeColor(color, -colorDiff));
+        changeColor(color, -colorDiff),
+        ((color.red + color.green + color.blue < 420))
+            ? Colors.white
+            : Colors.black);
   }
+
   static Color changeColor(Color color, int diff) {
     var newRed = color.red + diff;
     var newGreen = color.green + diff;
@@ -231,5 +339,134 @@ class MyTheme {
       newBlue = 255;
     }
     return Color.fromARGB(255, newRed, newGreen, newBlue);
+  }
+
+  // different animations for note tiles
+  static Widget getSelectedAnimatedWidget(
+      BuildContext context, int index, animation, Widget child) {
+    switch (MyTheme.selectedAnimation) {
+      case MyTheme.animationNone:
+        return child;
+      case MyTheme.animationSlideIn:
+        return SlideTransition(
+          position: Tween<Offset>(
+                  begin: const Offset(1, 0), end: const Offset(0, 0))
+              .animate(
+                  CurvedAnimation(parent: animation, curve: Curves.decelerate)),
+          child: child,
+        );
+      case MyTheme.animationSlideBounce:
+        return SlideTransition(
+          position: Tween<Offset>(
+                  begin: const Offset(1, 0), end: const Offset(0, 0))
+              .animate(
+                  CurvedAnimation(parent: animation, curve: Curves.bounceOut)),
+          child: child,
+        );
+      case MyTheme.animationSlideElastic:
+        return SlideTransition(
+          position: Tween<Offset>(
+                  begin: const Offset(1, 0), end: const Offset(0, 0))
+              .animate(
+                  CurvedAnimation(parent: animation, curve: Curves.elasticOut)),
+          child: child,
+        );
+      case MyTheme.animationFade:
+        return FadeTransition(
+          opacity: CurvedAnimation(parent: animation, curve: Curves.easeInExpo),
+          child: child,
+        );
+      case MyTheme.animationZoom:
+        return ScaleTransition(
+          scale: CurvedAnimation(parent: animation, curve: Curves.easeOutExpo),
+          child: child,
+        );
+      case MyTheme.animationPop:
+        return ScaleTransition(
+          scale: CurvedAnimation(parent: animation, curve: Curves.elasticOut),
+          child: child,
+        );
+      case MyTheme.animationZoomOut:
+        return ScaleTransition(
+          scale: Tween<double>(begin: 2.0, end: 1.0).animate(
+              CurvedAnimation(parent: animation, curve: Curves.decelerate)),
+          child: child,
+        );
+      case MyTheme.animationFallDown:
+        return ScaleTransition(
+          scale: Tween<double>(begin: 2.0, end: 1.0).animate(
+              CurvedAnimation(parent: animation, curve: Curves.bounceOut)),
+          child: child,
+        );
+      case MyTheme.animationFlying:
+        return SlideTransition(
+          position: Tween<Offset>(begin: Offset(0, 10), end: Offset(0, 0))
+              .animate(CurvedAnimation(
+                  parent: animation, curve: Curves.easeOutExpo)),
+          child: child,
+        );
+    }
+    return SlideTransition(
+      position:
+          Tween<Offset>(begin: const Offset(1, 0), end: const Offset(0, 0))
+              .animate(
+                  CurvedAnimation(parent: animation, curve: Curves.decelerate)),
+      child: child,
+    );
+  }
+
+  // animations for dialog, return transition builder for showGeneralDialog
+  static Widget getSelectedDialogTransition(
+      Animation<double> a1, Widget child) {
+    switch (MyTheme.selectedDialogAnimation) {
+      case MyTheme.dialogAnimationNone:
+        return child;
+      case MyTheme.dialogAnimationSlideIn:
+        return SlideTransition(
+          position: Tween<Offset>(begin: Offset(1, 0), end: Offset(0, 0))
+              .animate(CurvedAnimation(parent: a1, curve: Curves.decelerate)),
+          child: child,
+        );
+      case MyTheme.dialogAnimationSlideElastic:
+        return SlideTransition(
+          position: Tween<Offset>(begin: Offset(1, 0), end: Offset(0, 0))
+              .animate(CurvedAnimation(parent: a1, curve: Curves.elasticOut)),
+          child: child,
+        );
+      case MyTheme.dialogAnimationRotate:
+        return RotationTransition(
+            turns: CurvedAnimation(parent: a1, curve: Curves.bounceOut),
+            child: child);
+      case MyTheme.dialogAnimationFade:
+        return FadeTransition(opacity: a1, child: child);
+      case MyTheme.dialogAnimationZoomIn:
+        return ScaleTransition(
+            scale: CurvedAnimation(parent: a1, curve: Curves.decelerate),
+            child: child);
+      case MyTheme.dialogAnimationPop:
+        return ScaleTransition(
+            scale: CurvedAnimation(parent: a1, curve: Curves.bounceOut),
+            child: child);
+      case MyTheme.dialogAnimationZoomOut:
+        return ScaleTransition(
+            scale: Tween<double>(begin: 2.0, end: 1.0).animate(
+                CurvedAnimation(parent: a1, curve: Curves.easeOutExpo)),
+            child: child);
+      case MyTheme.dialogAnimationLanding:
+        return SlideTransition(
+          position: Tween<Offset>(
+                  begin: const Offset(0, -1), end: const Offset(0, 0))
+              .animate(CurvedAnimation(parent: a1, curve: Curves.easeOutExpo)),
+          child: child,
+        );
+    }
+    return child;
+  }
+
+  static Color getTextButtonColor() {
+    if(isDarkMode) {
+      return Colors.white;
+    }
+    return Colors.black;
   }
 }

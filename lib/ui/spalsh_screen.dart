@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
               CircularProgressIndicator(color:
                 Colors.black,),
               Padding(padding: EdgeInsets.all(16)),
-              Text('V7.0', style: TextStyle(fontSize: 22),),
+              Text('V${MyTheme.appVersion}', style: TextStyle(fontSize: 22),),
             ]
         ),
       )
