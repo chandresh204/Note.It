@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp> {
       title: 'MyApp',
       themeMode: _themeMode,
       theme: ThemeData(
+        useMaterial3: false,
         primarySwatch: _primarySwatch,
         fontFamily: _font,
       ),

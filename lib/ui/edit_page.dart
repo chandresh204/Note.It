@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:interactive_text/view/interactive_text.dart';
+import 'package:note_it/custome_widgets/bottom_sheet_url_open.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../data/encrypt_decrypt.dart';
@@ -329,10 +331,16 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
               physics: const BouncingScrollPhysics(),
               children: [
                 const SizedBox(height: 10),
-                Text(
+                InteractiveText(text: textToEdit, textStyle: TextStyle(fontSize: MyTheme.primaryFontSize, color: _getTextColor()),
+                  linkStyle: TextStyle(color: MyTheme.selectedHyperlinkColor.basicColor, fontSize: MyTheme.primaryFontSize),
+                  onUrlClick: (url) {
+                    final dialog = BottomSheetUrlOpen(url: url, context: context);
+                    dialog.getUi();
+                  }),
+            /*    Text(
                   textToEdit,
                   style: TextStyle(fontSize: MyTheme.primaryFontSize, color: _getTextColor()),
-                ),
+                ), */
                 const SizedBox(height: 100)
               ]
           ),

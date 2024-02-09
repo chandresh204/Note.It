@@ -5,7 +5,7 @@ import 'color.dart';
 
 class MyTheme {
 
-  static const appVersion = 8.0;
+  static const appVersion = 8.1;
   static const colorDiff = 50;
   static Color colorDefault = const Color(0xffffad76);
   static Color colorRed = const Color(0xffff3d41);
@@ -51,6 +51,7 @@ class MyTheme {
 
   static const String isDarkModePrefString = 'isDarkMode';
   static const String colorIdPrefsString = 'colorIdInPrefs';
+  static const String hyperlinkColorPrefsString = 'hyperLinkColorPrefs';
   static const String fontPreferenceString = 'fontInPrefs';
   static const String textSizePreferenceString = 'textSizeInPrefs';
   static const String securePasswordPrefString = 'secureNotes';
@@ -68,6 +69,7 @@ class MyTheme {
   static const String myColorDarkBluePrefs = 'myColorDarkBlue';
 
   static var selectedColorScheme = myColorDefault;
+  static var selectedHyperlinkColor = myColorBlue1;
   static var selectedFonts = 'Default';
   static var selectedAnimation = 'None';
   static var selectedDialogAnimation = 'Dialog Slide Elastic';
@@ -236,6 +238,73 @@ class MyTheme {
       default:
         {
           selectedColorScheme = myColorDefault;
+        }
+    }
+    final hyperlinkColorPrefs = prefs.getInt(hyperlinkColorPrefsString);
+    switch (hyperlinkColorPrefs) {
+      case colorId0:
+        {
+          selectedHyperlinkColor = myCustomColor;
+        }
+        break;
+      case colorId1:
+        {
+          selectedHyperlinkColor = myColorDefault;
+        }
+        break;
+      case colorId2:
+        {
+          selectedHyperlinkColor = myColorRed;
+        }
+        break;
+      case colorId3:
+        {
+          selectedHyperlinkColor = myColorBlue;
+        }
+        break;
+      case colorId4:
+        {
+          selectedHyperlinkColor = myColorGreen;
+        }
+        break;
+      case colorId5:
+        {
+          selectedHyperlinkColor = myColorGrey;
+        }
+        break;
+      case colorId6:
+        {
+          selectedHyperlinkColor = myColorBlue1;
+        }
+        break;
+      case colorId7:
+        {
+          selectedHyperlinkColor = myColorPink;
+        }
+        break;
+      case colorId8:
+        {
+          selectedHyperlinkColor = myColorPurple;
+        }
+        break;
+      case colorId9:
+        {
+          selectedHyperlinkColor = myColorGreenLight;
+        }
+        break;
+      case colorId10:
+        {
+          selectedHyperlinkColor = myColorBlack;
+        }
+        break;
+      case colorId11:
+        {
+          selectedHyperlinkColor = myColorLemon;
+        }
+        break;
+      default:
+        {
+          selectedHyperlinkColor = myColorBlue1;
         }
     }
     final font = prefs.getString(fontPreferenceString);

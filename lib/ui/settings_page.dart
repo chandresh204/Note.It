@@ -171,8 +171,8 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                             transitionDuration: Duration(milliseconds: (MyTheme.animationTiming * MyTheme.animationDialogTimingConst).toInt())
                         );
                       },
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Icon(Icons.restore),
                           SizedBox(width: 10),
                           Text('Restore Notes')
@@ -191,17 +191,17 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 6),
               children: [
-                _getColorPlates(MyTheme.myColorDefault),
-                _getColorPlates(MyTheme.myColorRed),
-                _getColorPlates(MyTheme.myColorGreen),
-                _getColorPlates(MyTheme.myColorBlue),
-                _getColorPlates(MyTheme.myColorGrey),
-                _getColorPlates(MyTheme.myColorBlue1),
-                _getColorPlates(MyTheme.myColorPink),
-                _getColorPlates(MyTheme.myColorPurple),
-                _getColorPlates(MyTheme.myColorGreenLight),
-                _getColorPlates(MyTheme.myColorBlack),
-                _getColorPlates(MyTheme.myColorLemon)
+                _getColorPlates(MyTheme.myColorDefault, false),
+                _getColorPlates(MyTheme.myColorRed, false),
+                _getColorPlates(MyTheme.myColorGreen, false),
+                _getColorPlates(MyTheme.myColorBlue, false),
+                _getColorPlates(MyTheme.myColorGrey, false),
+                _getColorPlates(MyTheme.myColorBlue1, false),
+                _getColorPlates(MyTheme.myColorPink, false),
+                _getColorPlates(MyTheme.myColorPurple, false),
+                _getColorPlates(MyTheme.myColorGreenLight, false),
+                _getColorPlates(MyTheme.myColorBlack, false),
+                _getColorPlates(MyTheme.myColorLemon, false)
               ],
             ),
             Row(
@@ -212,7 +212,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                       if (checked == true) {
                         setState(() {
                           MyTheme.selectedColorScheme = MyTheme.myCustomColor;
-                          _saveSelectedColor(MyTheme.colorId0);
+                          _saveSelectedColor(MyTheme.colorId0, false);
                         });
                       }
                     }),
@@ -220,6 +220,24 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                 TextButton(onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (ctx) => const MyColorSchemeEditor()));
                 }, child: const Text('Edit')),
+              ],
+            ),
+            _getDivider(),
+            Text(
+              'Hyperlink Color',
+              style: TextStyle(fontSize: MyTheme.largeFontSize),
+            ),
+            GridView(
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 6),
+              children: [
+                _getColorPlates(MyTheme.myColorRed, true),
+                _getColorPlates(MyTheme.myColorGreen, true),
+                _getColorPlates(MyTheme.myColorBlue1, true),
+                _getColorPlates(MyTheme.myColorPink, true),
+                _getColorPlates(MyTheme.myColorGreenLight, true),
+                _getColorPlates(MyTheme.myColorLemon, true)
               ],
             ),
             _getDivider(),
@@ -307,8 +325,8 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                 prefs.setInt(MyTheme.animationTimePrefString, value.toInt());
               });
             }, max: 1000, min: 100),
-            Row(
-              children: const [
+            const Row(
+              children: [
                 Expanded(child: Text('Fast')),
                 Text('Slow'),
               ],
@@ -347,8 +365,8 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
                         launchUrl(url,
                             mode: LaunchMode.externalNonBrowserApplication);
                       },
-                      child: Row(
-                        children: const [Icon(Icons.star), Text('Rate this App')],
+                      child: const Row(
+                        children: [Icon(Icons.star), Text('Rate this App')],
                       ),
                     )),
                 Container(
@@ -377,13 +395,22 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
     );
   }
 
-  _getColorPlates(MyColor myColor) {
-    bool selected = myColor.basicColor == MyTheme.selectedColorScheme.basicColor;
+  _getColorPlates(MyColor myColor, bool forHyperlink) {
+    bool selected = false;
+    if(forHyperlink) {
+      selected = myColor.basicColor == MyTheme.selectedHyperlinkColor.basicColor;
+    } else {
+      selected = myColor.basicColor == MyTheme.selectedColorScheme.basicColor;
+    }
     return GestureDetector(
       onTap: () {
         setState(() {
-          MyTheme.selectedColorScheme = myColor;
-          _saveSelectedColor(myColor.colorId);
+          if(forHyperlink) {
+            MyTheme.selectedHyperlinkColor = myColor;
+          } else {
+            MyTheme.selectedColorScheme = myColor;
+          }
+          _saveSelectedColor(myColor.colorId, forHyperlink);
         });
       },
       child: Container(
@@ -418,9 +445,13 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
     );
   }
 
-  _saveSelectedColor(int colorId) {
+  _saveSelectedColor(int colorId, bool forHyperlink) {
     SharedPreferences.getInstance().then((prefs) {
-      prefs.setInt(MyTheme.colorIdPrefsString, colorId);
+      if(forHyperlink) {
+        prefs.setInt(MyTheme.hyperlinkColorPrefsString, colorId);
+      } else {
+        prefs.setInt(MyTheme.colorIdPrefsString, colorId);
+      }
       MyApp.of(context)?.changeTheme(MyTheme.isDarkMode,
           MyTheme.selectedColorScheme.primary, MyTheme.selectedFonts);
     });
@@ -453,22 +484,17 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
   }
 
   _convertNotesToJson(List<Note> notes) {
-    //   print('password: ${MyTheme.securePassword}');
     String passwordEncrypted = '';
     if (MyTheme.securePassword.isNotEmpty) {
       passwordEncrypted = EncDec.getEncryptedText(MyTheme.securePassword);
     }
-    //  print('password Encrpt: $passwordEncrypted');
     final bkObj = {'notes': notes, 'password': passwordEncrypted};
     final bkString = json.encode(bkObj);
     final enBackup = EncDec.getEncryptedText(bkString);
-    //   print(enBackup);
 
     getApplicationDocumentsDirectory().then((dir) {
-      //     print('got dir: $dir');
       final file = File('${dir.path}/noteit.nbk');
       file.writeAsString(enBackup).then((value) {
-        //         print('bkFilee created');
         Share.shareFiles([file.path], text: 'Save your Backup');
       });
     });
@@ -479,27 +505,21 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
       if (files != null) {
         final restoreFile = File(files.files.first.path!);
         restoreFile.readAsString().then((encString) {
-          //     print('restoreEnc : $encString');
           final jsonString = EncDec.getDecryptText(encString);
-          //     print('mainJson: $jsonString');
           try {
             final listArray = json.decode(jsonString)['notes'] as List;
-            //       print('listArray: $listArray');
             List<Note> notes =
             listArray.map((noteJson) => Note.fromJson(noteJson)).toList();
-            //        print('restored Data found : $jsonString');
-            //        print('notes found ${notes.length}');
             final passEnc = json.decode(jsonString)['password'] as String;
             if (passEnc.isNotEmpty) {
               MyTheme.securePassword = EncDec.getDecryptText(passEnc);
-              //         print('Password: ${MyTheme.securePassword}');
               SharedPreferences.getInstance().then((pref) {
                 pref.setString(
                     MyTheme.securePasswordPrefString, MyTheme.securePassword);
               });
             }
             _insertRestoredNotes(notes);
-          } on Exception catch (_) {
+          } catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Restore Failed, Invalid File')));
           }
