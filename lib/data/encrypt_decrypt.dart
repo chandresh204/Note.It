@@ -5,18 +5,15 @@ class EncDec {
   static const String keyStr = 'a12oaocf8547GwkAkis{k8TalXRaxI84';
 
   static String getEncryptedText(String text) {
-    print('Encrypted: not $text');
     final key = Key.fromUtf8(keyStr);
   //  final iv = IV.fromLength(16);
     final iv = IV.allZerosOfLength(16);
     final encryptor = Encrypter(AES(key));
     final encrypted = encryptor.encrypt(text, iv: iv);
-    print('Encrypted: ${encrypted.base64}');
     return encrypted.base64;
   }
 
   static String getDecryptText(String eString) {
-    print('Encrypted: decrypting $eString');
     final encrypted = Encrypted.from64(eString);
     final key = Key.fromUtf8(keyStr);
   //  final iv = IV.fromLength(16);

@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import '../themes/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BottomSheetUrlOpen {
-  final String url;
+class BottomSheetMailCompose {
+  final String eAddress;
   final BuildContext context;
-  BottomSheetUrlOpen({required this.url, required this.context});
+  BottomSheetMailCompose({required this.eAddress, required this.context});
 
   getUi() {
     final textStyle = TextStyle(fontSize: MyTheme.primaryFontSize);
@@ -19,8 +19,8 @@ class BottomSheetUrlOpen {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Do you want to visit?', style: textStyle,),
-                Text(url),
+                Text('Do you want to send email?', style: textStyle,),
+                Text(eAddress),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -29,11 +29,11 @@ class BottomSheetUrlOpen {
                     Expanded(
                       child: ElevatedButton(onPressed: () {
                         Navigator.pop(context);
-                        launchUrl(Uri.parse(url));
+                        launchUrl(Uri.parse('mailto:$eAddress'));
                       },style: ButtonStyle(
                         backgroundColor: MaterialStateColor.resolveWith(
                                 (states) => Colors.red),
-                      ), child: const Text('Yes', style: TextStyle(color: Colors.white),)),
+                      ), child: const Text('Compose', style: TextStyle(color: Colors.white),)),
                     ),
                     const SizedBox(width: 20,),
                     Expanded(
@@ -44,12 +44,12 @@ class BottomSheetUrlOpen {
                     Expanded(
                       child: ElevatedButton(onPressed: () {
                         Navigator.pop(context);
-                        Clipboard.setData(ClipboardData(text: url));
+                        Clipboard.setData(ClipboardData(text: eAddress));
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Link copied to clipboard'))
+                            const SnackBar(content: Text('Email address copied to clipboard'))
                         );
                       },
-                          child: const Text('Copy Link')),
+                          child: const Text('Copy Address')),
                     ),
                   ],
                 )

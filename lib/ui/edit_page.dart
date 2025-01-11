@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:interactive_text/view/interactive_text.dart';
+import 'package:note_it/custome_widgets/BottomSheetMailCompose.dart';
+import 'package:note_it/custome_widgets/BottomSheetPhoneDial.dart';
 import 'package:note_it/custome_widgets/bottom_sheet_url_open.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -336,7 +338,16 @@ class _EditPageState extends State<EditPage> with SingleTickerProviderStateMixin
                   onUrlClick: (url) {
                     final dialog = BottomSheetUrlOpen(url: url, context: context);
                     dialog.getUi();
-                  }),
+                  },
+                  onPhoneClick: (phone) {
+                    final dialog = BottomSheetPhoneDial(phone: phone, context: context);
+                    dialog.getUi();
+                  },
+                  onEmailClick: (email) {
+                    final dialog = BottomSheetMailCompose(eAddress: email, context: context);
+                    dialog.getUi();
+                  },
+                  ),
             /*    Text(
                   textToEdit,
                   style: TextStyle(fontSize: MyTheme.primaryFontSize, color: _getTextColor()),

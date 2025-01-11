@@ -5,7 +5,7 @@ import 'color.dart';
 
 class MyTheme {
 
-  static const appVersion = 8.1;
+  static const appVersion = '8.2';
   static const colorDiff = 50;
   static Color colorDefault = const Color(0xffffad76);
   static Color colorRed = const Color(0xffff3d41);

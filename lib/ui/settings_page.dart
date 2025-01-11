@@ -495,7 +495,7 @@ class _SettingsPageState extends State<SettingsPage> with SingleTickerProviderSt
     getApplicationDocumentsDirectory().then((dir) {
       final file = File('${dir.path}/noteit.nbk');
       file.writeAsString(enBackup).then((value) {
-        Share.shareFiles([file.path], text: 'Save your Backup');
+        Share.shareXFiles([XFile(file.path)], text: 'Save your backup');
       });
     });
   }

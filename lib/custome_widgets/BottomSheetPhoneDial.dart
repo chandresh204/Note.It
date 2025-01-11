@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import '../themes/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BottomSheetUrlOpen {
-  final String url;
+class BottomSheetPhoneDial {
+  final String phone;
   final BuildContext context;
-  BottomSheetUrlOpen({required this.url, required this.context});
+  BottomSheetPhoneDial({required this.phone, required this.context});
 
   getUi() {
     final textStyle = TextStyle(fontSize: MyTheme.primaryFontSize);
@@ -19,8 +19,8 @@ class BottomSheetUrlOpen {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Do you want to visit?', style: textStyle,),
-                Text(url),
+                Text('Do you want to dial?', style: textStyle,),
+                Text(phone),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -29,7 +29,7 @@ class BottomSheetUrlOpen {
                     Expanded(
                       child: ElevatedButton(onPressed: () {
                         Navigator.pop(context);
-                        launchUrl(Uri.parse(url));
+                        launchUrl(Uri.parse('tel:$phone'));
                       },style: ButtonStyle(
                         backgroundColor: MaterialStateColor.resolveWith(
                                 (states) => Colors.red),
@@ -44,12 +44,12 @@ class BottomSheetUrlOpen {
                     Expanded(
                       child: ElevatedButton(onPressed: () {
                         Navigator.pop(context);
-                        Clipboard.setData(ClipboardData(text: url));
+                        Clipboard.setData(ClipboardData(text: phone));
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Link copied to clipboard'))
+                            const SnackBar(content: Text('Numbers copied to clipboard'))
                         );
                       },
-                          child: const Text('Copy Link')),
+                          child: const Text('Copy Numbers')),
                     ),
                   ],
                 )

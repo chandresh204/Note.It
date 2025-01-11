@@ -48,6 +48,7 @@ class _MyAppState extends State<MyApp> {
         fontFamily: _font,
       ),
       darkTheme: ThemeData(
+        useMaterial3: false,
         brightness: Brightness.dark,
         fontFamily: _font,
         floatingActionButtonTheme: const FloatingActionButtonThemeData(

@@ -31,13 +31,13 @@ class _SplashScreenState extends State<SplashScreen> {
         }) , (route) => false);
       }
     });
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
+            children: [
               Expanded(child: Image(image: AssetImage('assets/images/note_it_icon.png'), width: 250,)),
               CircularProgressIndicator(color:
                 Colors.black,),
