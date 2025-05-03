@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:note_it2/ui/theme/text_styles.dart';
+
+import '../theme/text_styles.dart';
 
 class NoteTile extends StatelessWidget {
   final String noteText;

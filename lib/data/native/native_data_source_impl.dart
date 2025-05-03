@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
-import 'package:note_it2/data/native/model/notification_data.dart';
-import 'package:note_it2/data/native/native_date_source.dart';
 
 import 'constants.dart';
+import 'model/notification_data.dart';
+import 'native_date_source.dart';
 
 class NativeDataSourceImpl implements NativeDataSource {
 

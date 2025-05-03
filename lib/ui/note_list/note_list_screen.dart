@@ -1,16 +1,14 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_it2/di/injector.dart';
-import 'package:note_it2/repository/note_repository.dart';
-import 'package:note_it2/ui/component/note_list_app_bar.dart';
-import 'package:note_it2/ui/component/note_tile.dart';
-import 'package:note_it2/ui/note_list/note_list_bloc.dart';
-import 'package:note_it2/ui/note_list/note_list_state.dart';
-import 'package:note_it2/ui/routes.dart';
 
+import '../../di/injector.dart';
+import '../../repository/note_repository.dart';
+import '../component/note_list_app_bar.dart';
+import '../component/note_tile.dart';
+import '../routes.dart';
+import 'note_list_bloc.dart';
 import 'note_list_event.dart';
+import 'note_list_state.dart';
 
 class NoteListScreen extends StatelessWidget {
 

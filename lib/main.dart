@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:note_it2/di/injector.dart';
-import 'package:note_it2/ui/note_edit_screen/note_edit_screen.dart';
-import 'package:note_it2/ui/note_list/note_list_screen.dart';
-import 'package:note_it2/ui/routes.dart';
-import 'package:note_it2/ui/secure_note_list/secure_note_list_screen.dart';
-import 'package:note_it2/ui/settings/settings_screen.dart';
+import 'package:note_it/ui/note_edit_screen/note_edit_screen.dart';
+import 'package:note_it/ui/note_list/note_list_screen.dart';
+import 'package:note_it/ui/routes.dart';
+import 'package:note_it/ui/secure_note_list/secure_note_list_screen.dart';
+import 'package:note_it/ui/settings/settings_screen.dart';
+
+import 'di/injector.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

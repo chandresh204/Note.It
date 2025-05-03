@@ -1,4 +1,4 @@
-import 'package:note_it2/database/note_database.dart';
+import '../../database/note_database.dart';
 
 abstract class LocalDataSource {
   Future<int> insertNote(String noteText);

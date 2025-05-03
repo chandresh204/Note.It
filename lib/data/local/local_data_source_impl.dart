@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
-import 'package:note_it2/data/local/local_data_source.dart';
-import 'package:note_it2/database/note_database.dart';
+
+import '../../database/note_database.dart';
+import 'local_data_source.dart';
 
 class LocalDataSourceImpl implements LocalDataSource {
   final NoteDatabase _noteDb;

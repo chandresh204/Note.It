@@ -1,9 +1,9 @@
-import 'package:note_it2/database/note_database.dart';
-import 'package:note_it2/ui/note_edit_screen/note_edit_event.dart';
-import 'package:note_it2/ui/note_edit_screen/note_edit_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../database/note_database.dart';
 import '../../repository/note_repository.dart';
+import 'note_edit_event.dart';
+import 'note_edit_state.dart';
 
 class NoteEditBloc extends Bloc<NoteEditEvent, NoteEditState> {
 

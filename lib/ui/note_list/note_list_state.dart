@@ -1,4 +1,4 @@
-import 'package:note_it2/ui/model/note_item.dart';
+import '../model/note_item.dart';
 
 abstract class NoteListState {}
 

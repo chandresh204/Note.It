@@ -2,14 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_it2/di/injector.dart';
-import 'package:note_it2/repository/backup_repository.dart';
-import 'package:note_it2/ui/settings/settings_bloc.dart';
-import 'package:note_it2/ui/settings/settings_event.dart';
-import 'package:note_it2/ui/settings/settings_state.dart';
-import 'package:note_it2/ui/theme/text_styles.dart';
+import 'package:note_it/ui/settings/settings_bloc.dart';
+import 'package:note_it/ui/settings/settings_event.dart';
+import 'package:note_it/ui/settings/settings_state.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../../di/injector.dart';
+import '../../repository/backup_repository.dart';
+import '../theme/text_styles.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});

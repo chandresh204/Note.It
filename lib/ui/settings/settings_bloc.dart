@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_it2/ui/settings/settings_event.dart';
-import 'package:note_it2/ui/settings/settings_state.dart';
+import 'package:note_it/ui/settings/settings_event.dart';
+import 'package:note_it/ui/settings/settings_state.dart';
 
 import '../../repository/backup_repository.dart';
 

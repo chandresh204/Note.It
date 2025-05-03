@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_it2/database/note_database.dart';
-import 'package:note_it2/mapper/note_data_to_note_ui.dart';
-import 'package:note_it2/repository/note_repository.dart';
+import 'package:note_it/mapper/note_data_to_note_ui.dart';
+import '../../database/note_database.dart';
+import '../../repository/note_repository.dart';
 import 'secure_note_event.dart';
 import 'secure_note_state.dart';
 

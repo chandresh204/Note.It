@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_it2/di/injector.dart';
-import 'package:note_it2/repository/note_repository.dart';
-import 'package:note_it2/ui/note_edit_screen/note_edit_bloc.dart';
-import 'package:note_it2/ui/routes.dart';
-
+import '../../di/injector.dart';
+import '../../repository/note_repository.dart';
+import '../routes.dart';
+import 'note_edit_bloc.dart';
 import 'note_edit_event.dart';
 import 'note_edit_state.dart';
 

@@ -1,7 +1,6 @@
-import 'package:note_it2/data/local/local_data_source.dart';
-import 'package:note_it2/data/native/constants.dart';
-import 'package:note_it2/data/native/native_date_source.dart';
-
+import '../data/local/local_data_source.dart';
+import '../data/native/constants.dart';
+import '../data/native/native_date_source.dart';
 import '../database/note_database.dart';
 
 class NoteRepository {
