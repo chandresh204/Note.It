@@ -1,25 +1,16 @@
-# note_it
+# note_it2
 
-Note.It created in flutter
+A new Flutter project.
 
 ## Getting Started
 
-A simple note application that provides lot of theme customizations, set the colors you like also provides cool animations
+This project is a starting point for a Flutter application.
 
-# Install from Play
-<a href="https://play.google.com/store/apps/details?id=chad.orionsoft.note_it">
-<img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" height="50px"/></a>
+A few resources to get you started if this is your first Flutter project:
 
-![](https://github.com/chandresh204/Note.It/blob/master/note_it_add.gif)
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-## Customize the app colors
-
-![](https://github.com/chandresh204/Note.It/blob/master/note_it_colours.gif) ![](https://github.com/chandresh204/Note.It/blob/master/note_it_custom_color.gif)
-
-## Customize app fonts
-
-![](https://github.com/chandresh204/Note.It/blob/master/note_it_fonts.gif)
-
-## Customize Animation
-
-![](https://github.com/chandresh204/Note.It/blob/master/note_it_animations.gif) ![](https://github.com/chandresh204/Note.It/blob/master/note_it_dialog_animation.gif)
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
