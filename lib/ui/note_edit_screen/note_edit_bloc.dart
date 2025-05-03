@@ -12,13 +12,17 @@ class NoteEditBloc extends Bloc<NoteEditEvent, NoteEditState> {
   NoteData? _editableNote;
 
   NoteEditBloc(this._noteRepository, this._editNoteId) : super(NoteEditIdle()) {
-    if(_editNoteId > 0) {
-      _setNoteInUi(_editNoteId);
-    }
     on<AddNoteEvent>(_addNewNote);
     on<SetInitNote>(_setInitNote);
+    on<EnterEditEvent>(_switchToEditMode);
+    if(_editNoteId > 0) {
+      _setNoteInUi(_editNoteId);
+    } else {
+      add(EnterEditEvent(''));
+    }
   }
 
+  // event handlers
   _setNoteInUi(int id) async {
     _editableNote = await _noteRepository.getNoteById(id);
     if(_editableNote != null) {
@@ -26,7 +30,10 @@ class NoteEditBloc extends Bloc<NoteEditEvent, NoteEditState> {
     }
   }
 
-  // event handlers
+  _switchToEditMode(EnterEditEvent event, emit) {
+    emit(NoteEditEditingState());
+  }
+
   _addNewNote(AddNoteEvent event, Emitter<NoteEditState> emit) {
     if(event.noteText.isNotEmpty) {
       if(_editableNote == null) {

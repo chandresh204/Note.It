@@ -12,7 +12,8 @@ class NoteEditScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as NoteEditArguments?;
+    final args =
+        ModalRoute.of(context)?.settings.arguments as NoteEditArguments?;
     final noteEditController = TextEditingController();
     return BlocProvider<NoteEditBloc>(
       create: (_) => NoteEditBloc(getIt<NoteRepository>(), args?.id ?? -1),
@@ -31,39 +32,54 @@ class _NoteEditPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Add Note')),
       body: BlocConsumer<NoteEditBloc, NoteEditState>(
         builder: (ctx, state) {
-            if(state is NoteEditIdle) {
-                return Column(
-              children: [
-                Expanded(
-                  child: Text(
-                    _controller.text,
-                  ),
-                ),
-              ],
-            );
-            } else {
-              return const Text('Unknown State');
-            }
-          },
+          if (state is NoteEditIdle) {
+            return Text(_controller.text);
+          } else if(state is NoteEditEditingState) {
+            return TextField(expands: true,
+                maxLines: null,
+                minLines: null,
+                controller: _controller);
+          } else {
+            return const Text('Unknown State');
+          }
+        },
         listener: (BuildContext context, NoteEditState state) {
-            if(state is NoteEditIdle) {
-              if(state.initNote != null) {
-                _controller.text = state.initNote!;
-              }
+          if (state is NoteEditIdle) {
+            if (state.initNote != null) {
+              _controller.text = state.initNote!;
             }
-            if(state is NoteError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.errorMsg))
-              );
-            }
-            if(state is NoteSaved) {
-              Navigator.pop(context);
-            }
-      },
+          }
+          if (state is NoteError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.errorMsg)));
+          }
+          if (state is NoteSaved) {
+            Navigator.pop(context);
+          }
+        },
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        context.read<NoteEditBloc>().add(AddNoteEvent(_controller.text));
-      }),
+      floatingActionButton: BlocBuilder<NoteEditBloc, NoteEditState>(
+        builder: (ctx, state) {
+          return (state is NoteEditIdle)
+              ? FloatingActionButton(
+                onPressed: () {
+                  context.read<NoteEditBloc>().add(
+                    EnterEditEvent(_controller.text),
+                  );
+                },
+                child: Icon(Icons.edit),
+              )
+              : FloatingActionButton(
+                onPressed: () {
+                  context.read<NoteEditBloc>().add(
+                    AddNoteEvent(_controller.text),
+                  );
+                },
+                child: Icon(Icons.check),
+              );
+        },
+      ),
     );
   }
 }

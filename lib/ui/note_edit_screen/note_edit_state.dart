@@ -14,9 +14,11 @@ class NoteEditIdle extends NoteEditState {
   List<Object?> get props => [initNote];
 }
 
-class NoteSaved extends NoteEditIdle {}
+class NoteEditEditingState extends NoteEditState {}
 
-class NoteError extends NoteEditIdle {
+class NoteSaved extends NoteEditEditingState {}
+
+class NoteError extends NoteEditEditingState {
   final String errorMsg;
   NoteError(this.errorMsg);
 
