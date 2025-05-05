@@ -4,13 +4,23 @@ import 'package:note_it/ui/note_list/note_list_screen.dart';
 import 'package:note_it/ui/routes.dart';
 import 'package:note_it/ui/secure_note_list/secure_note_list_screen.dart';
 import 'package:note_it/ui/settings/settings_screen.dart';
+import 'package:note_it/util/runtime_constants.dart';
+import 'package:note_it/util/shared_preference_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'di/injector.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocators();
+  setupRunTimeConstants();
   runApp(const MyApp());
+}
+
+setupRunTimeConstants() {
+  SharedPreferences.getInstance().then((prefs) {
+    RuntimeConstants.securePassword = prefs.getString(SharedPreferencesConstants.securePasswordPrefString);
+  });
 }
 
 class MyApp extends StatelessWidget {

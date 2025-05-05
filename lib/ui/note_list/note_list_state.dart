@@ -8,3 +8,10 @@ class NoteListIdle extends NoteListState {
   final List<NoteItem> notes;
   NoteListIdle(this.notes);
 }
+
+class NoteErrorMessage extends NoteListIdle {
+  final String message;
+  NoteErrorMessage(this.message, super.notes);
+}
+
+class NoteEnterSecure extends NoteListState {}

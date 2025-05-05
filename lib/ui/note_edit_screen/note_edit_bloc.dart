@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_it/data/encryption/encrypt_decrypt.dart';
 
 import '../../database/note_database.dart';
 import '../../repository/note_repository.dart';
@@ -26,7 +27,11 @@ class NoteEditBloc extends Bloc<NoteEditEvent, NoteEditState> {
   _setNoteInUi(int id) async {
     _editableNote = await _noteRepository.getNoteById(id);
     if(_editableNote != null) {
-      add(SetInitNote(_editableNote!.note));
+      if(_editableNote!.isEncrypt) {
+        add(SetInitNote(EncDec.getDecryptText(_editableNote!.note)));
+      } else {
+        add(SetInitNote(_editableNote!.note));
+      }
     }
   }
 

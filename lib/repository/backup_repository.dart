@@ -29,8 +29,8 @@ class BackupRepository {
 
   Future<String> _convertNotesToJson(List<NoteData> notes) async {
     String passwordEncrypted = '';
-    if (RuntimeConstants.securePassword.isNotEmpty) {
-      passwordEncrypted = EncDec.getEncryptedText(RuntimeConstants.securePassword);
+    if (RuntimeConstants.securePassword != null &&  RuntimeConstants.securePassword!.isNotEmpty) {
+      passwordEncrypted = EncDec.getEncryptedText(RuntimeConstants.securePassword!);
     }
     final bkObj = {'notes': notes, 'password': passwordEncrypted};
     final bkString = json.encode(bkObj);
@@ -54,7 +54,7 @@ class BackupRepository {
         SharedPreferences.getInstance().then((pref) {
           pref.setString(
             SharedPreferencesConstants.securePasswordPrefString,
-            RuntimeConstants.securePassword,
+            RuntimeConstants.securePassword!,
           );
         });
       }

@@ -34,11 +34,12 @@ class _SecureNoteListPageState extends State<_SecureNoteListPage> with SingleTic
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: NoteListAppBar(
+        appBar: NoteListAppBar( // TODO replace this app bar
           cancelSearch: context.read<SecureNoteBloc>().getSearchCancelStream(),
           onSearchQuery: (query) {
             context.read<SecureNoteBloc>().add(NoteListSearch(query));
           },
+          onSecureClick: () { },
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: () {

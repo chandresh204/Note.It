@@ -1,3 +1,3 @@
 class RuntimeConstants {
-  static String securePassword = "";
+  static String? securePassword;
 }

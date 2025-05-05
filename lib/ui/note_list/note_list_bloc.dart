@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_it/mapper/note_data_to_note_ui.dart';
+import 'package:note_it/util/runtime_constants.dart';
 
 import '../../database/note_database.dart';
 import '../../repository/note_repository.dart';
@@ -33,6 +34,7 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     on<RefreshListEvent>(_onRefreshListEvent);
     on<NoteDeleteEvent>(_onNoteDelete);
     on<NoteListSearch>(_onNoteListSearch);
+    on<SecurePasswordSubmit>(_onSecurePasswordSubmit);
   }
 
   _onNoteListUpdated(NoteListUpdatedEvent event,Emitter<NoteListState> emit) {
@@ -55,6 +57,16 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     final searchedNotes = await _noteRepository.searchNotes(event.query) ?? List.empty();
     _currentNoteList = searchedNotes;
     add(NoteListUpdatedEvent(searchedNotes.toNoteItem()));
+  }
+
+  _onSecurePasswordSubmit(SecurePasswordSubmit event, Emitter<NoteListState> emit) async {
+    final actualPassword = RuntimeConstants.securePassword;
+    if(actualPassword == event.password) {
+      emit(NoteEnterSecure());
+    } else {
+      final notes = (state as NoteListIdle).notes;
+      emit(NoteErrorMessage('Incorrect Password, Please try again', notes));
+    }
   }
 
   void startTimer() {

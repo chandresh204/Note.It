@@ -7,7 +7,9 @@ import '../routes.dart';
 class NoteListAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Function(String) onSearchQuery;
   final Stream<bool> cancelSearch;
-  const NoteListAppBar({super.key, required this.onSearchQuery, required this.cancelSearch});
+  final Function() onSecureClick;
+  const NoteListAppBar({super.key, required this.onSearchQuery, required this.cancelSearch,
+    required this.onSecureClick});
 
   @override
   State<NoteListAppBar> createState() => _NoteListAppBarState();
@@ -71,9 +73,7 @@ class _NoteListAppBarState extends State<NoteListAppBar> {
               ? [IconButton(onPressed: _stopSearch, icon: Icon(Icons.clear))]
               : [
                 IconButton(onPressed: _startSearch, icon: Icon(Icons.search)),
-                IconButton(onPressed: () {
-                  Navigator.pushNamed(context, Routes.secureListScreen);
-                }, icon: Icon(Icons.lock)),
+                IconButton(onPressed: widget.onSecureClick, icon: Icon(Icons.lock)),
                 IconButton(onPressed: () {
                   Navigator.pushNamed(context, Routes.settingsScreen);
                 }, icon: Icon(Icons.settings)),

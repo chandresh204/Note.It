@@ -18,3 +18,8 @@ class NoteListSearch extends NoteListEvent {
   final String query;
   NoteListSearch(this.query);
 }
+
+class SecurePasswordSubmit extends NoteListEvent {
+  final String password;
+  SecurePasswordSubmit(this.password);
+}
