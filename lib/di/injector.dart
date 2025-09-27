@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import '../repository/settings_repository.dart';
 
 import '../data/local/local_data_source.dart';
 import '../data/local/local_data_source_impl.dart';
@@ -19,4 +20,5 @@ void setupLocators() {
       NoteRepository(getIt<LocalDataSource>(), getIt<NativeDataSource>()));
   getIt.registerLazySingleton<BackupRepository>(() =>
       BackupRepository(getIt<LocalDataSource>()));
+  getIt.registerLazySingleton<SettingsRepository>(() => SettingsRepository());
 }

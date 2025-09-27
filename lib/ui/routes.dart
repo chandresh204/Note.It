@@ -1,12 +1,15 @@
 class Routes {
-  static const listScreen = '/';
+  static const splashScreen = '/';
+  static const listScreen = '/list';
   static const editScreen = '/edit';
+  static const secureIntroductionScreen = '/secureIntroduction';
   static const settingsScreen = '/settings';
   static const secureListScreen = '/secureNotes';
 }
 
 class NoteEditArguments {
   final int id;
-  NoteEditArguments(this.id);
+  final bool isSecure;
+  NoteEditArguments(this.id, this.isSecure);
 }
 

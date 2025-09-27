@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_it/util/extensions.dart';
-import 'package:note_it/util/runtime_constants.dart';
+import '../component/empty_list_view.dart';
+import '/ui/dialog/bottom_sheet_delete_confirm.dart';
+import '/ui/dialog/bottom_sheet_note_actions.dart';
+import '/util/extensions.dart';
+import '/util/runtime_constants.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../di/injector.dart';
 import '../../repository/note_repository.dart';
@@ -45,7 +49,7 @@ class _NoteListPageState extends State<_NoteListPage> with SingleTickerProviderS
           },
           onSecureClick: () {
             if(RuntimeConstants.securePassword.isNullOrEmpty()) {
-              context.snackBar('No Password Set');
+              Navigator.pushNamed(context, Routes.secureIntroductionScreen);
             } else {
               showGeneralDialog(
                 context: context,
@@ -64,7 +68,9 @@ class _NoteListPageState extends State<_NoteListPage> with SingleTickerProviderS
             builder: (ctx, state) => state is NoteListLoading
                 ? const Center(child: CircularProgressIndicator())
                 : state is NoteListIdle
-                ? ListView.builder(
+                ? (state.notes.isEmpty) 
+                  ? EmptyListView()
+                  : ListView.builder(
                 itemCount: state.notes.length,
                 itemBuilder: (ctx, index) {
                   final note = state.notes[index];
@@ -75,10 +81,24 @@ class _NoteListPageState extends State<_NoteListPage> with SingleTickerProviderS
                       createdTime: note.createdTime,
                       editTime: note.lastEditTime,
                       onClick: () {
-                        Navigator.pushNamed(context, Routes.editScreen, arguments: NoteEditArguments(note.id));
+                        Navigator.pushNamed(context, Routes.editScreen, arguments: NoteEditArguments(note.id, false));
                       },
                       onLongClick: () {
-                        context.read<NoteListBloc>().add(NoteDeleteEvent(note.id));
+                        showModalBottomSheet(
+                            context: context,
+                            useRootNavigator: true,
+                            builder: (ctx) => BottomSheetNoteActions(
+                              noteText: note.noteText,
+                              onNoteShare: () {
+                                SharePlus.instance.share(ShareParams(title: 'Share with', text: note.noteText));
+                              },
+                              onDelete: () {
+                                showModalBottomSheet(context: context, builder: (ctx) => BottomSheetDeleteConfirm(
+                                    noteText: note.noteText,
+                                    onDelete: () => context.read<NoteListBloc>().add(NoteDeleteEvent(note.id))
+                                ));
+                              }
+                            ));
                       },
                     ),
                   );

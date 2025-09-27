@@ -2,9 +2,10 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
-        android:label="note_it2"
+        android:label="Note.It"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@drawable/note_it_icon"
+        android:roundIcon = "@drawable/note_it_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"

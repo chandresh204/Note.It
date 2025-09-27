@@ -9,12 +9,12 @@ class LocalDataSourceImpl implements LocalDataSource {
   LocalDataSourceImpl(this._noteDb);
 
   @override
-  Future<int> insertNote(String noteText) => _noteDb.insertNote(
+  Future<int> insertNote(String noteText, bool isEncrypt) => _noteDb.insertNote(
     NoteCompanion(
       id: Value(DateTime.now().millisecondsSinceEpoch),
       note: Value(noteText),
       editTime: Value(DateTime.now().millisecondsSinceEpoch),
-      isEncrypt: const Value(false),
+      isEncrypt: Value(isEncrypt),
     ),
   );
 
@@ -63,4 +63,7 @@ class LocalDataSourceImpl implements LocalDataSource {
 
   @override
   Future<List<NoteData>> getAllNotes(bool encrypted) => _noteDb.getAllNotes(encrypted);
+
+  @override
+  Future<int> getNotesEditedAfterTime(int editedAfter) => _noteDb.getNotesEditedAfterTime(editedAfter);
 }

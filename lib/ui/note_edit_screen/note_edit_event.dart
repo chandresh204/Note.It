@@ -5,12 +5,17 @@ class EnterEditEvent extends NoteEditEvent {
   EnterEditEvent(this.noteText);
 }
 
-class AddNoteEvent extends NoteEditEvent {
+class SaveNoteEvent extends NoteEditEvent {
   final String noteText;
-  AddNoteEvent(this.noteText);
+  SaveNoteEvent(this.noteText);
 }
 
 class SetInitNote extends NoteEditEvent {
   final String initText;
   SetInitNote(this.initText);
+}
+
+class OnNoteTextChange extends NoteEditEvent {
+  final String editedText;
+  OnNoteTextChange({required this.editedText});
 }

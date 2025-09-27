@@ -8,17 +8,16 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-
 val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
-if (keystorePropertiesFile.exists()) {
+if(keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
     namespace = "chad.orionsoft.note_it"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "29.0.13113456"
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_it/mapper/note_data_to_note_ui.dart';
+import '/mapper/note_data_to_note_ui.dart';
 import '../../database/note_database.dart';
 import '../../repository/note_repository.dart';
 import 'secure_note_event.dart';
@@ -67,6 +67,7 @@ class SecureNoteBloc extends Bloc<SecureNoteEvent, SecureNoteState> {
   Future<void> close() {
     _timer.cancel();
     print('secure timer stopped');
+    _noteSubscription?.cancel();
     return super.close();
   }
 }

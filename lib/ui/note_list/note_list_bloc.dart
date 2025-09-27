@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_it/mapper/note_data_to_note_ui.dart';
-import 'package:note_it/util/runtime_constants.dart';
+import '/mapper/note_data_to_note_ui.dart';
+import '/util/runtime_constants.dart';
 
 import '../../database/note_database.dart';
 import '../../repository/note_repository.dart';
@@ -16,7 +16,10 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
 
   final StreamController<bool> _searchCancelStream = StreamController<bool>();
 
+  /// This timer is used to update the note insert/ edit timing for readable way.
+  /// e.g. just now, 1 min ago, 10 min ago etc. this text need to update regularly with time elapse
   late Timer _timer;
+
   bool _timerRunning = false;
   List<NoteData>? _currentNoteList;
 
@@ -24,17 +27,31 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
     _noteSubscription?.cancel();
     _noteSubscription = _noteRepository.watchAllNotes().listen((notes) {
       _currentNoteList = notes;
+      _toggleTimer();
       add(NoteListUpdatedEvent(notes.toNoteItem()));
-      if(_currentNoteList != null && _currentNoteList!.isNotEmpty && !_timerRunning) {
-        _timerRunning = true;
-        startTimer();
-      }
     });
+    // _toggleTimer();
     on<NoteListUpdatedEvent>(_onNoteListUpdated);
     on<RefreshListEvent>(_onRefreshListEvent);
     on<NoteDeleteEvent>(_onNoteDelete);
     on<NoteListSearch>(_onNoteListSearch);
     on<SecurePasswordSubmit>(_onSecurePasswordSubmit);
+  }
+
+  _toggleTimer() async {
+    final editedAfter = await _noteRepository.getNotesEditedAfterTime(DateTime.now().millisecondsSinceEpoch - 3600000);
+    print("editedAfter >> $editedAfter");
+    if(editedAfter > 0) {
+      if(!_timerRunning) {
+        _timerRunning = true;
+        startTimer();
+      }
+    } else {
+      print("timer not required now");
+      if(_timerRunning) {
+        _timer.cancel();
+      }
+    }
   }
 
   _onNoteListUpdated(NoteListUpdatedEvent event,Emitter<NoteListState> emit) {
@@ -62,7 +79,7 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   _onSecurePasswordSubmit(SecurePasswordSubmit event, Emitter<NoteListState> emit) async {
     final actualPassword = RuntimeConstants.securePassword;
     if(actualPassword == event.password) {
-      emit(NoteEnterSecure());
+      emit(NoteEnterSecure((state as NoteListIdle).notes));
     } else {
       final notes = (state as NoteListIdle).notes;
       emit(NoteErrorMessage('Incorrect Password, Please try again', notes));
@@ -78,8 +95,10 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
 
   @override
   Future<void> close() {
-    _timer.cancel();
-    print('timer stopped');
+    if(_timer.isActive) {
+      _timer.cancel();
+      print('timer stopped');
+    }
     return super.close();
   }
 }

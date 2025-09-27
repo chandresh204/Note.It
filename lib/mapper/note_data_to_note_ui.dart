@@ -1,4 +1,4 @@
-import 'package:note_it/util/date_time_converter.dart';
+import '/util/date_time_converter.dart';
 
 import '../data/encryption/encrypt_decrypt.dart';
 import '../database/note_database.dart';

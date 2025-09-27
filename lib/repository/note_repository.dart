@@ -1,3 +1,5 @@
+import '../data/encryption/encrypt_decrypt.dart';
+
 import '../data/local/local_data_source.dart';
 import '../data/native/constants.dart';
 import '../data/native/native_date_source.dart';
@@ -9,8 +11,9 @@ class NoteRepository {
 
   NoteRepository(this._localDataSource, this._nativeDataSource);
 
-  addNote(String noteText) async {
-    final added = await _localDataSource.insertNote(noteText);
+  addNote(String noteText, bool isEncrypt) async {
+    final saveText = isEncrypt ? EncDec.getEncryptedText(noteText) : noteText;
+    final added = await _localDataSource.insertNote(saveText, isEncrypt);
     if (added > 0) {
       _nativeDataSource.showNotification(
         'New Note',
@@ -55,4 +58,7 @@ class NoteRepository {
 
   Future<List<NoteData>?> searchNotes(String query) async =>
       _localDataSource.searchNotes(query);
+
+  Future<int> getNotesEditedAfterTime(int editedAfter) async =>
+      _localDataSource.getNotesEditedAfterTime(editedAfter);
 }

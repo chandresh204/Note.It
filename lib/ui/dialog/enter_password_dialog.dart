@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:note_it/ui/theme/text_styles.dart';
+import '/ui/theme/text_styles.dart';
 
 class EnterPasswordDialog extends StatefulWidget {
   final Function(String) onSubmit;
@@ -32,6 +32,7 @@ class _EnterPasswordDialogState extends State<EnterPasswordDialog> {
               decoration: InputDecoration(
                 border: OutlineInputBorder()
               ),
+              keyboardType: TextInputType.number,
             ),
             SizedBox(height: 16),
             Row(

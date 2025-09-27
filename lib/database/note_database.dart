@@ -51,15 +51,22 @@ class NoteDatabase extends _$NoteDatabase {
             ..where((n) => n.isEncrypt.equals(encrypted))
             ..orderBy([(t) => OrderingTerm.desc(t.editTime)]))
           .get();
+
+  Future<int> getNotesEditedAfterTime(int editeAfter) async {
+    final result = await customSelect(
+      'SELECT COUNT(*) AS cnt FROM note WHERE editTime >= ?',
+      variables: [Variable.withInt(editeAfter)],
+    ).getSingle();
+    return result.data['cnt'] as int;
+  }
 }
 
 LazyDatabase _openConnection() {
-  // path: /data/user/0/chad.orionsoft.note_it/databases/note-database.db
   final dbPath = Platform.isAndroid ?
-    '/data/user/0/chad.orionsoft.note_it/databases/note-database.db' : '/home/chad/note-database.db';
+    '/data/user/0/chad.orionsoft.note_it/databases/note-database.db'
+      : '/home/chad/note-database.db'; // testing database on my linux system
   return LazyDatabase(() async {
     final dbFile = File(dbPath);
-    print("db path: $dbFile");
     return NativeDatabase(dbFile);
   });
 }

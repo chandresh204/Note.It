@@ -68,6 +68,9 @@ class _NoteListAppBarState extends State<NoteListAppBar> {
                 onChanged: _onSearchChanged,
               )
               : Text('My Notes'),
+      shadowColor: Colors.blue,
+      scrolledUnderElevation: 12.0,
+      animateColor: true,
       actions:
           _isSearching
               ? [IconButton(onPressed: _stopSearch, icon: Icon(Icons.clear))]

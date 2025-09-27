@@ -14,4 +14,6 @@ class NoteErrorMessage extends NoteListIdle {
   NoteErrorMessage(this.message, super.notes);
 }
 
-class NoteEnterSecure extends NoteListState {}
+class NoteEnterSecure extends NoteListIdle {
+  NoteEnterSecure(super.notes);
+}

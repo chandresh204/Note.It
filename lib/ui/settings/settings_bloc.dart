@@ -2,18 +2,22 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_it/ui/settings/settings_event.dart';
-import 'package:note_it/ui/settings/settings_state.dart';
+import '../../repository/settings_repository.dart';
+import '../../util/runtime_constants.dart';
+import '/ui/settings/settings_event.dart';
+import '/ui/settings/settings_state.dart';
 
 import '../../repository/backup_repository.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final BackupRepository _backupRepository;
+  final SettingsRepository _settingsRepository;
 
-  SettingsBloc(this._backupRepository) : super(SettingStateIdle()) {
+  SettingsBloc(this._backupRepository, this._settingsRepository) : super(SettingStateIdle()) {
     on<RestoreNotesEvent>(_restoreNotes);
     on<ShowSnackbarEvent>(_showSnackBar);
     on<BackupNotesEvent>(_prepareBackupInJson);
+    on<UpdateTextSizeEvent>(_updateTextScaler);
   }
 
   _restoreNotes(RestoreNotesEvent event, emit) {
@@ -21,7 +25,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (files != null) {
         final restoreFile = File(files.files.first.path!);
         final restored = await _backupRepository.restoreNotesFromFile(restoreFile);
-        final msg = restored >= 0 
+        final msg = restored >= 0
           ? '$restored notes restored'
             : 'Something went wrong when restoring notes';
         add(ShowSnackbarEvent(msg));
@@ -40,6 +44,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     } else {
       emit(BackupDataReceivedState(backupData));
     }
+  }
+
+  _updateTextScaler(UpdateTextSizeEvent event, emit)  {
+    RuntimeConstants.currentTextScaler = event.newSize + 0.5;
+    emit(SettingStateIdle());
+    _settingsRepository.updateTextScaler(RuntimeConstants.currentTextScaler);
   }
 
 }

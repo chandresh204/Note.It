@@ -1,3 +1,5 @@
 class SharedPreferencesConstants {
+  static const String lastAppVersionPrefString = 'lastAppVersion';
   static const String securePasswordPrefString = 'secureNotes';
+  static const String textScaleFactorPrefString = 'textScaleFactor';
 }

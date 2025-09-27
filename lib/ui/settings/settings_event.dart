@@ -9,3 +9,8 @@ class ShowSnackbarEvent extends SettingsEvent {
 class RestoreNotesEvent extends SettingsEvent {}
 
 class BackupNotesEvent extends SettingsEvent {}
+
+class UpdateTextSizeEvent extends SettingsEvent {
+  final double newSize;
+  UpdateTextSizeEvent({required this.newSize});
+}

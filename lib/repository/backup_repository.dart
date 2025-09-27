@@ -54,7 +54,7 @@ class BackupRepository {
         SharedPreferences.getInstance().then((pref) {
           pref.setString(
             SharedPreferencesConstants.securePasswordPrefString,
-            RuntimeConstants.securePassword!,
+            passEnc,
           );
         });
       }

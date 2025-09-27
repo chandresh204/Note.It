@@ -14,13 +14,18 @@ class NoteEditIdle extends NoteEditState {
   List<Object?> get props => [initNote];
 }
 
-class NoteEditEditingState extends NoteEditState {}
+class NoteEditEditingState extends NoteEditState {
+  final String editedText;
+  NoteEditEditingState({required this.editedText});
+}
 
-class NoteSaved extends NoteEditEditingState {}
+class NoteSaved extends NoteEditEditingState {
+  NoteSaved({required super.editedText});
+}
 
 class NoteError extends NoteEditEditingState {
   final String errorMsg;
-  NoteError(this.errorMsg);
+  NoteError(this.errorMsg) : super(editedText: '');
 
   @override
   List<Object?> get props => [errorMsg];
