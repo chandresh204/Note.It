@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_it/util/runtime_constants.dart';
 import '/ui/note_edit_screen/note_edit_screen.dart';
 import '/ui/note_list/note_list_screen.dart';
 import '/ui/routes.dart';
@@ -32,17 +33,8 @@ class MyApp extends StatelessWidget {
         Routes.settingsScreen : (context) => const SettingsScreen(),
         Routes.secureListScreen : (context) => const SecureNoteListScreen()
       },
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.blue,
-          brightness: Brightness.dark
-        ),
-        useMaterial3: true,
-      ),
+      theme: RuntimeConstants.lightThemeData,
+      darkTheme: RuntimeConstants.darkThemeData,
       themeMode: ThemeMode.system,
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_it/ui/theme/text_styles.dart';
+import 'package:note_it/util/runtime_constants.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../di/injector.dart';
@@ -55,7 +57,7 @@ class _NoteReadOnly extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Note.It - Read Only'),
-        shadowColor: Colors.blue,
+        shadowColor: RuntimeConstants.lightThemeData.primaryColor,
         scrolledUnderElevation: 12,
         actions: appBarReadOnlyActions(noteText),
       ),
@@ -63,7 +65,10 @@ class _NoteReadOnly extends StatelessWidget {
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(16),
-            child: MyInteractiveText(text: noteText),
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 50),
+                child: MyInteractiveText(text: noteText)
+            ),
           ),
         ),
       ),
@@ -155,11 +160,19 @@ class _NoteEditPage extends StatelessWidget {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: TextField(
-              expands: true,
-              maxLines: null,
-              minLines: null,
-              controller: _controller,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 50),
+              child: TextField(
+                expands: true,
+                maxLines: null,
+                minLines: null,
+                decoration: null,
+                controller: _controller,
+                autofocus: true,
+                style: AppTextStyles.body.copyWith(
+                  fontSize: 20*RuntimeConstants.currentTextScaler
+                ),
+              ),
             ),
           ),
         ),

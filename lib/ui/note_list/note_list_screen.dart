@@ -71,8 +71,11 @@ class _NoteListPageState extends State<_NoteListPage> with SingleTickerProviderS
                 ? (state.notes.isEmpty) 
                   ? EmptyListView(searchQuery: ctx.read<NoteListBloc>().getSearchQuery())
                   : ListView.builder(
-                itemCount: state.notes.length,
+                itemCount: state.notes.length + 1,
                 itemBuilder: (ctx, index) {
+                  if(index == state.notes.length) {
+                    return Padding(padding: EdgeInsets.symmetric(vertical: 50));
+                  }
                   final note = state.notes[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

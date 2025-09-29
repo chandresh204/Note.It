@@ -56,8 +56,11 @@ class _SecureNoteListPageState extends State<_SecureNoteListPage>
                     ? const Center(child: CircularProgressIndicator())
                     : state is NoteListIdle
                     ? ListView.builder(
-                      itemCount: state.notes.length,
+                      itemCount: state.notes.length + 1,
                       itemBuilder: (ctx, index) {
+                        if(index == state.notes.length) {
+                          return Padding(padding: EdgeInsets.symmetric(vertical: 50));
+                        }
                         final note = state.notes[index];
                         return Padding(
                           padding: const EdgeInsets.symmetric(

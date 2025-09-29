@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_it/util/runtime_constants.dart';
 
 import '../theme/text_styles.dart';
 
@@ -15,7 +16,7 @@ class TextIconButton extends StatelessWidget {
       onTap: onClick,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: backgroundColor ?? ColorScheme.dark().primaryContainer,
+          color: backgroundColor ?? RuntimeConstants.lightThemeData.primaryColor,
           borderRadius: BorderRadius.circular(16)
         ),
         child: Padding(
