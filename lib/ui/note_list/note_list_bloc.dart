@@ -22,6 +22,7 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
 
   bool _timerRunning = false;
   List<NoteData>? _currentNoteList;
+  String _searchQuery = "";
 
   NoteListBloc(this._noteRepository) : super(NoteListLoading()) {
     _noteSubscription?.cancel();
@@ -71,6 +72,7 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   }
 
   _onNoteListSearch(NoteListSearch event, Emitter<NoteListState> emit) async {
+    _searchQuery = event.query;
     final searchedNotes = await _noteRepository.searchNotes(event.query) ?? List.empty();
     _currentNoteList = searchedNotes;
     add(NoteListUpdatedEvent(searchedNotes.toNoteItem()));
@@ -92,6 +94,8 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   }
 
   Stream<bool> getSearchCancelStream() => _searchCancelStream.stream;
+
+  String getSearchQuery() => _searchQuery;
 
   @override
   Future<void> close() {

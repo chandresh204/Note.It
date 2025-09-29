@@ -69,7 +69,7 @@ class _NoteListPageState extends State<_NoteListPage> with SingleTickerProviderS
                 ? const Center(child: CircularProgressIndicator())
                 : state is NoteListIdle
                 ? (state.notes.isEmpty) 
-                  ? EmptyListView()
+                  ? EmptyListView(searchQuery: ctx.read<NoteListBloc>().getSearchQuery())
                   : ListView.builder(
                 itemCount: state.notes.length,
                 itemBuilder: (ctx, index) {

@@ -430,7 +430,7 @@ packages:
       path: "package/interactive_text"
       relative: true
     source: path
-    version: "0.0.6"
+    version: "0.0.7"
   io:
     dependency: transitive
     description:
