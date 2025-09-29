@@ -23,7 +23,7 @@ class NoteTile extends StatelessWidget {
       onTap: onClick,
       onLongPress: onLongClick,
       child: Card(
-        elevation: 9,
+        elevation: 15,
         child: SizedBox(
           width: double.infinity,
           child: Padding(
@@ -34,17 +34,37 @@ class NoteTile extends StatelessWidget {
               children: [
                 Text(
                   noteText,
-                  style: AppTextStyles.heading2,
+                  style: AppTextStyles.body.copyWith(
+                    fontWeight: FontWeight.bold
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                Text(createdTime),
-                Text(editTime),
+                Divider(),
+                Row(
+                  children: [
+                    _iconAndTextWidget(Icons.note_add_outlined, createdTime),
+                    Expanded(child: SizedBox()),
+                    (createdTime != editTime) ? _iconAndTextWidget(Icons.note_alt_outlined,editTime) : SizedBox(),
+                  ],
+                ),
+
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  // make global if required
+  _iconAndTextWidget(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon),
+        SizedBox(width: 8),
+        Text(text)
+      ],
     );
   }
 }
