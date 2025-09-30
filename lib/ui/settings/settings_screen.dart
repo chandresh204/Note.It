@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_it/ui/theme/app_colors.dart';
 import '../../repository/settings_repository.dart';
 import '../../util/constants.dart';
 import '/ui/settings/settings_bloc.dart';
@@ -15,19 +16,22 @@ import '../../repository/backup_repository.dart';
 import '../theme/text_styles.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  final Function() onThemeColorChanged;
+  const SettingsScreen({super.key, required this.onThemeColorChanged});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SettingsBloc(getIt<BackupRepository>(), getIt<SettingsRepository>()),
-      child: _SettingsPage(),
+      create: (_) =>
+          SettingsBloc(getIt<BackupRepository>(), getIt<SettingsRepository>()),
+      child: _SettingsPage(onThemeColorChanged),
     );
   }
 }
 
 class _SettingsPage extends StatelessWidget {
-  const _SettingsPage();
+  final Function() onThemeColorChanged;
+  const _SettingsPage(this.onThemeColorChanged);
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +74,9 @@ class _SettingsPage extends StatelessWidget {
               });
             });
           }
+          if(state is ThemeColorChanged) {
+            onThemeColorChanged();
+          }
         },
       ),
     );
@@ -83,10 +90,7 @@ class _SettingsPage extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.all(16.0),
       children: [
-        Text(
-          'Backup & Restore',
-          style: AppTextStyles.heading2,
-        ),
+        Text('Backup & Restore', style: AppTextStyles.heading2),
         SizedBox(height: widgetSpacing),
         Row(
           children: [
@@ -133,8 +137,49 @@ class _SettingsPage extends StatelessWidget {
             );
           },
         ),
-        Text('This is Sample Text', style: AppTextStyles.body, textScaler: TextScaler.linear(state.textScaler + Constants.textScalerAndSliderDiff))
+        Text(
+          'This is Sample Text',
+          style: AppTextStyles.body,
+          textScaler: TextScaler.linear(
+            state.textScaler + Constants.textScalerAndSliderDiff,
+          ),
+        ),
+        SizedBox(
+          height: 200,
+          child: GridView(
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 5,
+            ),
+            children: AppColors.values
+                .map((e) => _colorSetItem(e, state.selectedColor == e, () {
+                  context.read<SettingsBloc>().add(UpdateThemeColorEvent(color: e));
+            }))
+                .toList(),
+          ),
+        ),
       ],
+    );
+  }
+
+  Widget _colorSetItem(AppColors color, bool isSelected, Function() onTap) {
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Stack(
+          alignment: AlignmentDirectional.center,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: color.mapToMaterialColor(),
+              ),
+            ),
+            isSelected ? Icon(Icons.check) : SizedBox()
+          ],
+        ),
+      ),
     );
   }
 }

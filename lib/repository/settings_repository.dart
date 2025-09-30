@@ -1,3 +1,5 @@
+import 'package:note_it/ui/theme/app_colors.dart';
+
 import '../data/encryption/encrypt_decrypt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,6 +17,10 @@ class SettingsRepository {
 
   void updateTextScaler(double scale) {
     _prefs.setDouble(SharedPreferencesConstants.textScaleFactorPrefString, scale);
+  }
+
+  void updateAppThemeColor(AppColors color) {
+    _prefs.setString(SharedPreferencesConstants.themeColorPrefString, color.name);
   }
 
   Future<double> getTextScaler() async {

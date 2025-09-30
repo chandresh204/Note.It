@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_it/ui/theme/app_colors.dart';
+import 'package:note_it/ui/theme/themes.dart';
 import '../../repository/settings_repository.dart';
 import '../../util/runtime_constants.dart';
 import '/ui/settings/settings_event.dart';
@@ -18,6 +20,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<ShowSnackbarEvent>(_showSnackBar);
     on<BackupNotesEvent>(_prepareBackupInJson);
     on<UpdateTextSizeEvent>(_updateTextScaler);
+    on<UpdateThemeColorEvent>(_updateThemeColor);
   }
 
   _restoreNotes(RestoreNotesEvent event, emit) {
@@ -50,6 +53,15 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     RuntimeConstants.currentTextScaler = event.newSize + 0.5;
     emit(SettingStateIdle());
     _settingsRepository.updateTextScaler(RuntimeConstants.currentTextScaler);
+  }
+
+  _updateThemeColor(UpdateThemeColorEvent event, emit) {
+    RuntimeConstants.selectedAppColor = event.color;
+    RuntimeConstants.lightThemeData = createLightTheme(event.color.mapToMaterialColor());
+    RuntimeConstants.darkThemeData = createDarkTheme(event.color.mapToMaterialColor());
+    emit(SettingStateIdle());
+    _settingsRepository.updateAppThemeColor(event.color);
+    emit(ThemeColorChanged());
   }
 
 }

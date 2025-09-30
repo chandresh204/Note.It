@@ -47,7 +47,8 @@ class _SplashScreenState extends State<SplashScreen> {
       final encPassword =  prefs.getString(SharedPreferencesConstants.securePasswordPrefString);
       RuntimeConstants.securePassword = (encPassword == null) ? null : EncDec.getDecryptText(encPassword);
       final appColor = prefs.getString(SharedPreferencesConstants.themeColorPrefString) ?? AppColors.orange.name;
-      final materialAppColor = (getAppColorFromName(appColor)).mapToMaterialColor();
+      RuntimeConstants.selectedAppColor = getAppColorFromName(appColor);
+      final materialAppColor = RuntimeConstants.selectedAppColor.mapToMaterialColor();
       RuntimeConstants.lightThemeData = createLightTheme(materialAppColor);
       RuntimeConstants.darkThemeData = createDarkTheme(materialAppColor);
       widget.onThemeSet();

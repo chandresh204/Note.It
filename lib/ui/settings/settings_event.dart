@@ -1,3 +1,5 @@
+import 'package:note_it/ui/theme/app_colors.dart';
+
 abstract class SettingsEvent {}
 
 class ShowSnackbarEvent extends SettingsEvent {
@@ -13,4 +15,9 @@ class BackupNotesEvent extends SettingsEvent {}
 class UpdateTextSizeEvent extends SettingsEvent {
   final double newSize;
   UpdateTextSizeEvent({required this.newSize});
+}
+
+class UpdateThemeColorEvent extends SettingsEvent {
+  final AppColors color;
+  UpdateThemeColorEvent({required this.color});
 }

@@ -37,7 +37,9 @@ class _MyAppState extends State<MyApp> {
         Routes.listScreen : (context) => const NoteListScreen(),
         Routes.editScreen : (context) => const NoteEditScreen(),
         Routes.secureIntroductionScreen : (context) => const SecurePasswordIntroduction(),
-        Routes.settingsScreen : (context) => const SettingsScreen(),
+        Routes.settingsScreen : (context) => SettingsScreen(onThemeColorChanged: () {
+          setState(() {});
+        },),
         Routes.secureListScreen : (context) => const SecureNoteListScreen()
       },
       theme: RuntimeConstants.lightThemeData,
