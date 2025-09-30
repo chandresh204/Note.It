@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:note_it/ui/theme/app_colors.dart';
+import 'package:note_it/ui/theme/themes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +12,8 @@ import '../routes.dart';
 import '../theme/text_styles.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final Function() onThemeSet;
+  const SplashScreen({super.key, required this.onThemeSet});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -43,6 +46,11 @@ class _SplashScreenState extends State<SplashScreen> {
       RuntimeConstants.currentTextScaler = prefs.getDouble(SharedPreferencesConstants.textScaleFactorPrefString) ?? 1.0;
       final encPassword =  prefs.getString(SharedPreferencesConstants.securePasswordPrefString);
       RuntimeConstants.securePassword = (encPassword == null) ? null : EncDec.getDecryptText(encPassword);
+      final appColor = prefs.getString(SharedPreferencesConstants.themeColorPrefString) ?? AppColors.orange.name;
+      final materialAppColor = (getAppColorFromName(appColor)).mapToMaterialColor();
+      RuntimeConstants.lightThemeData = createLightTheme(materialAppColor);
+      RuntimeConstants.darkThemeData = createDarkTheme(materialAppColor);
+      widget.onThemeSet();
       Future.delayed(Duration(seconds: 1), () {
         if(mounted) {
           Navigator.pushReplacementNamed(context, Routes.listScreen);
