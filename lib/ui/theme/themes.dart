@@ -17,7 +17,7 @@ ThemeData createDarkTheme() {
       brightness: Brightness.dark
     ),
     useMaterial3: true,
-    fontFamily: RuntimeConstants.selectedFontFamily?.fontName
+    fontFamily: RuntimeConstants.selectedFontFamily.fontName
   );
 }
 

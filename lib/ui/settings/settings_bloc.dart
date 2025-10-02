@@ -2,14 +2,13 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_it/ui/theme/app_colors.dart';
 import 'package:note_it/ui/theme/themes.dart';
-import '../../repository/settings_repository.dart';
-import '../../util/runtime_constants.dart';
+
 import '/ui/settings/settings_event.dart';
 import '/ui/settings/settings_state.dart';
-
 import '../../repository/backup_repository.dart';
+import '../../repository/settings_repository.dart';
+import '../../util/runtime_constants.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final BackupRepository _backupRepository;

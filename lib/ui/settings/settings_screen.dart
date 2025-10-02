@@ -186,7 +186,7 @@ class _SettingsPage extends StatelessWidget {
             height: 300,
             child: GridView(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+                crossAxisCount: (MediaQuery.of(context).size.width/150).toInt(),
                 childAspectRatio: 3,
               ),
               controller: scrollController,
@@ -251,10 +251,10 @@ class _SettingsPage extends StatelessWidget {
   }
 
   Widget _fontSelectItem(FontFamily f, bool isSelected, Function() onTap) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4),
-      child: GestureDetector(
-        onTap: onTap,
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 4),
         child: Container(
           decoration: isSelected
               ? BoxDecoration(
@@ -262,11 +262,14 @@ class _SettingsPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 )
               : null,
-          child: Center(
-            child: Text(
-              f.fontName,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 20, fontFamily: f.fontName),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Center(
+              child: Text(
+                f.fontName,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 20, fontFamily: f.fontName),
+              ),
             ),
           ),
         ),
