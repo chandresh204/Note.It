@@ -14,13 +14,6 @@ class NoteRepository {
   addNote(String noteText, bool isEncrypt) async {
     final saveText = isEncrypt ? EncDec.getEncryptedText(noteText) : noteText;
     final added = await _localDataSource.insertNote(saveText, isEncrypt);
-    if (added > 0) {
-      _nativeDataSource.showNotification(
-        'New Note',
-        noteText,
-        Constants.notificationHigh,
-      );
-    }
   }
 
   Future<int> addMultipleNotes(List<NoteData> notes) async {
@@ -36,24 +29,10 @@ class NoteRepository {
 
   updateNote(NoteData note) async {
     final updated = _localDataSource.updateNote(note);
-    if (await updated) {
-      _nativeDataSource.showNotification(
-        'Note updated',
-        note.note,
-        Constants.notificationDefault,
-      );
-    }
   }
 
   deleteNote(int id) async {
     final deleted = _localDataSource.deleteNote(id);
-    if (await deleted > 0) {
-      _nativeDataSource.showNotification(
-        'Note Deleted',
-        'Note Deleted',
-        Constants.notificationLow,
-      );
-    }
   }
 
   Future<List<NoteData>?> searchNotes(String query) async =>
