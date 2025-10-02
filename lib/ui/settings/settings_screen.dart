@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_it/ui/component/text_icon_button.dart';
 import 'package:note_it/ui/theme/app_colors.dart';
+import 'package:note_it/ui/theme/font_family.dart';
+import 'package:note_it/util/runtime_constants.dart';
 import '../../repository/settings_repository.dart';
 import '../../util/constants.dart';
 import '/ui/settings/settings_bloc.dart';
@@ -74,7 +77,7 @@ class _SettingsPage extends StatelessWidget {
               });
             });
           }
-          if(state is ThemeColorChanged) {
+          if (state is ThemeColorChanged) {
             onThemeColorChanged();
           }
         },
@@ -83,82 +86,125 @@ class _SettingsPage extends StatelessWidget {
   }
 
   Widget _settingsView(BuildContext context, SettingStateIdle state) {
-    ScrollController controller = ScrollController();
+    final scrollController = ScrollController();
+    Future.delayed(Duration(milliseconds: 200), () {
+      scrollController.animateTo(
+        (RuntimeConstants.selectedFontFamily.index) * 25,
+        duration: Duration(seconds: 1),
+        curve: Easing.emphasizedDecelerate,
+      );
+    });
     const double widgetSpacing = 16;
-    return ListView(
-      controller: controller,
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(16.0),
-      children: [
-        Text('Backup & Restore', style: AppTextStyles.heading2),
-        SizedBox(height: widgetSpacing),
-        Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  //            prepareNotesInJson();
-                  // adding dialog to show information about backup
-                  context.read<SettingsBloc>().add(BackupNotesEvent());
-                },
-                child: Row(
-                  children: [
-                    Icon(Icons.backup),
-                    SizedBox(width: 10),
-                    Text('Backup Notes'),
-                  ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: ListView(
+        children: [
+          Text('Backup & Restore', style: AppTextStyles.heading2),
+          SizedBox(height: widgetSpacing),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    //            prepareNotesInJson();
+                    // adding dialog to show information about backup
+                    context.read<SettingsBloc>().add(BackupNotesEvent());
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.backup),
+                      SizedBox(width: 10),
+                      Text('Backup Notes'),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Container(width: 10),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  context.read<SettingsBloc>().add(RestoreNotesEvent());
-                },
-                child: Row(
-                  children: [
-                    Icon(Icons.restore),
-                    SizedBox(width: 10),
-                    Text('Restore Notes', overflow: TextOverflow.ellipsis),
-                  ],
+              Container(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.read<SettingsBloc>().add(RestoreNotesEvent());
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.restore),
+                      SizedBox(width: 10),
+                      Text('Restore Notes', overflow: TextOverflow.ellipsis),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        SizedBox(height: widgetSpacing),
-        Text('Text Size', style: AppTextStyles.heading2),
-        Slider(
-          value: state.textScaler,
-          onChanged: (newVal) {
-            context.read<SettingsBloc>().add(
-              UpdateTextSizeEvent(newSize: newVal),
-            );
-          },
-        ),
-        Text(
-          'This is Sample Text',
-          style: AppTextStyles.body,
-          textScaler: TextScaler.linear(
-            state.textScaler + Constants.textScalerAndSliderDiff,
+            ],
           ),
-        ),
-        SizedBox(
-          height: 200,
-          child: GridView(
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 5,
-            ),
-            children: AppColors.values
-                .map((e) => _colorSetItem(e, state.selectedColor == e, () {
-                  context.read<SettingsBloc>().add(UpdateThemeColorEvent(color: e));
-            }))
-                .toList(),
+          SizedBox(height: widgetSpacing),
+          Divider(),
+          Text('Text Size', style: AppTextStyles.heading2),
+          Slider(
+            value: state.textScaler,
+            onChanged: (newVal) {
+              context.read<SettingsBloc>().add(
+                UpdateTextSizeEvent(newSize: newVal),
+              );
+            },
           ),
-        ),
-      ],
+          SizedBox(height: widgetSpacing),
+          Text(
+            'This is Sample Text',
+            style: AppTextStyles.body,
+            textScaler: TextScaler.linear(
+              state.textScaler + Constants.textScalerAndSliderDiff,
+            ),
+          ),
+          Divider(),
+          Text('Theme Color', style: AppTextStyles.heading2),
+          SizedBox(
+            child: GridView(
+              padding: EdgeInsets.all(0),
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: (MediaQuery.of(context).size.width / 80)
+                    .toInt(),
+              ),
+              children: AppColors.values
+                  .map(
+                    (e) => _colorSetItem(e, state.selectedColor == e, () {
+                      context.read<SettingsBloc>().add(
+                        UpdateThemeColorEvent(color: e),
+                      );
+                    }),
+                  )
+                  .toList(),
+            ),
+          ),
+          Divider(),
+          SizedBox(height: widgetSpacing),
+          Text('Fonts', style: AppTextStyles.heading2),
+          SizedBox(
+            height: 300,
+            child: GridView(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 3,
+              ),
+              controller: scrollController,
+              children: FontFamily.values
+                  .map(
+                    (f) => _fontSelectItem(
+                      f,
+                      RuntimeConstants.selectedFontFamily == f,
+                      () {
+                        context.read<SettingsBloc>().add(
+                          UpdateFontFamilyEvent(font: f),
+                        );
+                      },
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -176,8 +222,32 @@ class _SettingsPage extends StatelessWidget {
                 color: color.mapToMaterialColor(),
               ),
             ),
-            isSelected ? Icon(Icons.check) : SizedBox()
+            isSelected ? Icon(Icons.check) : SizedBox(),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _fontSelectItem(FontFamily f, bool isSelected, Function() onTap) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: isSelected
+              ? BoxDecoration(
+                  color: RuntimeConstants.selectedAppColor.mapToMaterialColor(),
+                  borderRadius: BorderRadius.circular(16),
+                )
+              : null,
+          child: Center(
+            child: Text(
+              f.fontName,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 20, fontFamily: f.fontName),
+            ),
+          ),
         ),
       ),
     );

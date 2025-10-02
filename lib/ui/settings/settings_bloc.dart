@@ -21,6 +21,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<BackupNotesEvent>(_prepareBackupInJson);
     on<UpdateTextSizeEvent>(_updateTextScaler);
     on<UpdateThemeColorEvent>(_updateThemeColor);
+    on<UpdateFontFamilyEvent>(_updateFontFamily);
   }
 
   _restoreNotes(RestoreNotesEvent event, emit) {
@@ -57,10 +58,19 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   _updateThemeColor(UpdateThemeColorEvent event, emit) {
     RuntimeConstants.selectedAppColor = event.color;
-    RuntimeConstants.lightThemeData = createLightTheme(event.color.mapToMaterialColor());
-    RuntimeConstants.darkThemeData = createDarkTheme(event.color.mapToMaterialColor());
+    RuntimeConstants.lightThemeData = createLightTheme();
+    RuntimeConstants.darkThemeData = createDarkTheme();
     emit(SettingStateIdle());
     _settingsRepository.updateAppThemeColor(event.color);
+    emit(ThemeColorChanged());
+  }
+
+  _updateFontFamily(UpdateFontFamilyEvent event, emit) {
+    RuntimeConstants.selectedFontFamily = event.font;
+    RuntimeConstants.lightThemeData = createLightTheme();
+    RuntimeConstants.darkThemeData = createDarkTheme();
+    emit(SettingStateIdle());
+    _settingsRepository.updateFontFamily(event.font);
     emit(ThemeColorChanged());
   }
 

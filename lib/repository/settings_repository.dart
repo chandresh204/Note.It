@@ -1,4 +1,5 @@
 import 'package:note_it/ui/theme/app_colors.dart';
+import 'package:note_it/ui/theme/font_family.dart';
 
 import '../data/encryption/encrypt_decrypt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,5 +35,9 @@ class SettingsRepository {
 
   String? getSecureNotePassword() {
     return _prefs.getString(SharedPreferencesConstants.securePasswordPrefString);
+  }
+
+  void updateFontFamily(FontFamily f) {
+    _prefs.setString(SharedPreferencesConstants.fontFamilyPrefString, f.fontName);
   }
 }

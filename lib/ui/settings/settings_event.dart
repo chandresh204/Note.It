@@ -1,4 +1,5 @@
 import 'package:note_it/ui/theme/app_colors.dart';
+import 'package:note_it/ui/theme/font_family.dart';
 
 abstract class SettingsEvent {}
 
@@ -20,4 +21,9 @@ class UpdateTextSizeEvent extends SettingsEvent {
 class UpdateThemeColorEvent extends SettingsEvent {
   final AppColors color;
   UpdateThemeColorEvent({required this.color});
+}
+
+class UpdateFontFamilyEvent extends SettingsEvent {
+  final FontFamily font;
+  UpdateFontFamilyEvent({required this.font});
 }
