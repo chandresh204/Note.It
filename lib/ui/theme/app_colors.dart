@@ -10,7 +10,6 @@ AppColors getAppColorFromName(String name) {
   } catch (e) {
     return AppColors.orange;
   }
-
 }
 
 extension MapToMaterialColor on AppColors {
