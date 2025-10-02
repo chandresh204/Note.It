@@ -16,17 +16,19 @@ class TextIconButton extends StatelessWidget {
       onTap: onClick,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: backgroundColor ?? RuntimeConstants.lightThemeData.primaryColor,
+          color: backgroundColor ?? RuntimeConstants.lightThemeData.primaryColor.withAlpha(100),
           borderRadius: BorderRadius.circular(16)
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: EdgeInsets.symmetric(vertical: 8),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon),
               SizedBox(width: 8),
-              Text(text, style: AppTextStyles.heading2)
+              Text(text, style: AppTextStyles.body)
             ],
           ),
         ),
