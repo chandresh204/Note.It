@@ -18,6 +18,8 @@ import '../../di/injector.dart';
 import '../../repository/backup_repository.dart';
 import '../theme/text_styles.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
 class SettingsScreen extends StatelessWidget {
   final Function() onThemeColorChanged;
   const SettingsScreen({super.key, required this.onThemeColorChanged});
@@ -203,6 +205,25 @@ class _SettingsPage extends StatelessWidget {
                   .toList(),
             ),
           ),
+          Divider(),
+          SizedBox(height: widgetSpacing),
+          Row(
+            children: [
+              Expanded(child: TextIconButton(icon: Icons.share, text: 'Share App', onClick: () {
+                SharePlus.instance.share(
+                  ShareParams(
+                    text: 'Hello, Im using Note.It. It is a simple app to keep your notes. '
+                            'You can also try it by clicking on the link: ${Constants.playStoreUrl}'
+                  )
+                );
+              })),
+              SizedBox(width: 8),
+              Expanded(child: TextIconButton(icon: Icons.star, text: 'Rate App', onClick: () {
+                launchUrl(Uri.parse(Constants.playStoreUrl));
+              })),
+            ],
+          ),
+          SizedBox(height: 100)
         ],
       ),
     );
