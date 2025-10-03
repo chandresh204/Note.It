@@ -20,7 +20,7 @@ class TextIconButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(16)
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
