@@ -5,6 +5,9 @@ class ChangePasswordInit extends ChangePasswordState{
   ChangePasswordInit({this.errorMsg});
 }
 
-class CreateNewPassword extends ChangePasswordState{}
+class CreateNewPassword extends ChangePasswordState{
+  final String? errorMsg;
+  CreateNewPassword({required this.errorMsg});
+}
 
 class ChangePasswordDone extends ChangePasswordState{}

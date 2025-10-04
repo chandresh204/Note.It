@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_it/ui/dialog/dialog_with_icon.dart';
 import '/ui/change_password/change_password_bloc.dart';
 import '/ui/change_password/change_password_state.dart';
 import '/ui/theme/text_styles.dart';
@@ -18,9 +19,7 @@ class ChangePasswordDialog extends StatelessWidget {
 }
 
 class _ChangeDialog extends StatelessWidget {
-  _ChangeDialog();
-
-  final _currentPasswordController = TextEditingController();
+  const _ChangeDialog();
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +45,12 @@ class _ChangeDialog extends StatelessWidget {
                 if (state is ChangePasswordInit) {
                   return _enterCurrentPasswordUI(
                     ctx,
-                    _currentPasswordController,
-                    state.errorMsg
+                    state.errorMsg,
                   );
                 } else if (state is CreateNewPassword) {
-                  return _createNewPasswordUi(ctx);
+                  return _createNewPasswordUi(ctx, state.errorMsg);
                 } else if (state is ChangePasswordDone) {
-                  return _changePasswordDoneUi();
+                  return _changePasswordDoneUi(ctx);
                 } else {
                   return Text('bad state');
                 }
@@ -66,9 +64,10 @@ class _ChangeDialog extends StatelessWidget {
 
   Widget _enterCurrentPasswordUI(
     BuildContext context,
-    TextEditingController controller,
     String? error,
   ) {
+    final currentPasswordController = TextEditingController();
+
     return Column(
       children: [
         Row(
@@ -76,14 +75,15 @@ class _ChangeDialog extends StatelessWidget {
             Expanded(
               child: TextField(
                 obscureText: true,
-                controller: controller,
+                controller: currentPasswordController,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Current Password'),
               ),
             ),
             TextButton(
               onPressed: () {
                 context.read<ChangePasswordBloc>().checkCurrentPassword(
-                  controller.text,
+                  currentPasswordController.text,
                 );
               },
               child: Text('Next'),
@@ -91,25 +91,41 @@ class _ChangeDialog extends StatelessWidget {
           ],
         ),
         if (!error.isNullOrEmpty())
-          Text(
-            error!,
-            style: TextStyle(color: Colors.red),
-          ),
+          Text(error!, style: TextStyle(color: Colors.red)),
       ],
     );
   }
 
-  Widget _createNewPasswordUi(BuildContext context) {
+  Widget _createNewPasswordUi(BuildContext context, String? errorMsg) {
+    final newPassController = TextEditingController();
+    final confirmPassController = TextEditingController();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        TextField(decoration: InputDecoration(labelText: 'New Password')),
+        TextField(
+          decoration: InputDecoration(labelText: 'New Password'),
+          controller: newPassController,
+          keyboardType: TextInputType.number,
+          obscureText: true,
+        ),
         TextField(
           decoration: InputDecoration(labelText: 'Re-enter New Password'),
+          controller: confirmPassController,
+          keyboardType: TextInputType.number,
+          obscureText: true,
         ),
+        !errorMsg.isNullOrEmpty()
+            ? Text(
+                errorMsg!,
+                style: AppTextStyles.small.copyWith(color: Colors.red),
+              )
+            : Text('', style: AppTextStyles.body.copyWith(color: Colors.red)),
         ElevatedButton(
           onPressed: () {
-            context.read<ChangePasswordBloc>().changePassword();
+            context.read<ChangePasswordBloc>().changePassword(
+              newPassController.text,
+              confirmPassController.text,
+            );
           },
           child: Text('Submit'),
         ),
@@ -117,14 +133,13 @@ class _ChangeDialog extends StatelessWidget {
     );
   }
 
-  Widget _changePasswordDoneUi() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.check, color: Colors.green),
-        Text('Password Changed'),
-        ElevatedButton(onPressed: () {}, child: Text('Ok')),
-      ],
-    );
+  Widget _changePasswordDoneUi(BuildContext context) {
+    return DialogWithIcon(
+        icon: Icons.check,
+        title: 'Success',
+        description: 'Password changed successfully',
+        onDismiss: () {
+          Navigator.pop(context);
+        });
   }
 }
