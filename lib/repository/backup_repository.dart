@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:note_it/util/constants.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/encryption/encrypt_decrypt.dart';
@@ -28,11 +30,16 @@ class BackupRepository {
   }
 
   Future<String> _convertNotesToJson(List<NoteData> notes) async {
+    PackageInfo pInfo = await PackageInfo.fromPlatform();
     String passwordEncrypted = '';
     if (RuntimeConstants.securePassword != null &&  RuntimeConstants.securePassword!.isNotEmpty) {
       passwordEncrypted = EncDec.getEncryptedText(RuntimeConstants.securePassword!);
     }
-    final bkObj = {'notes': notes, 'password': passwordEncrypted};
+    final bkObj = {
+      Constants.backUpNotesJson : notes,
+      Constants.backUpPasswordJson : passwordEncrypted,
+      Constants.backUpAppVersionJson : pInfo.buildNumber
+    };
     final bkString = json.encode(bkObj);
     final enBackup = EncDec.getEncryptedText(bkString);
 
@@ -40,15 +47,16 @@ class BackupRepository {
   }
 
   Future<int> restoreNotesFromFile(File restoreFile) async {
+    PackageInfo pInfo = await PackageInfo.fromPlatform();
     final encString = await restoreFile.readAsString();
     final jsonString = EncDec.getDecryptText(encString);
     try {
-      final listArray = json.decode(jsonString)['notes'] as List;
+      final listArray = json.decode(jsonString)[Constants.backUpNotesJson] as List;
       List<NoteData> notes =
       listArray
           .map((noteJson) => NoteData.fromJson(noteJson))
           .toList();
-      final passEnc = json.decode(jsonString)['password'] as String;
+      final passEnc = json.decode(jsonString)[Constants.backUpPasswordJson] as String;
       if (passEnc.isNotEmpty) {
         RuntimeConstants.securePassword = EncDec.getDecryptText(passEnc);
         SharedPreferences.getInstance().then((pref) {
@@ -57,6 +65,17 @@ class BackupRepository {
             passEnc,
           );
         });
+      }
+      try {
+        final backedUpFromAppVersion = json.decode(jsonString)[Constants.backUpAppVersionJson] as int;
+        // perform operation on backed up from version
+        print('backed up from version >>> $backedUpFromAppVersion');
+        if(backedUpFromAppVersion > int.parse(pInfo.buildNumber)) {
+          print('backed up from future release....$backedUpFromAppVersion');
+        }
+      } catch (e) {
+        // if back up file is too old then the appVersion might be missing in backup file
+        print('Error when getting app version from backup file: $e');
       }
       return _insertRestoredNotes(notes);
     } catch (e) {
