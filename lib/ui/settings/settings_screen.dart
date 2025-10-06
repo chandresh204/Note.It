@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_it/ui/component/text_icon_button.dart';
+import 'package:note_it/ui/dialog/bottom_sheet_information.dart';
 import 'package:note_it/ui/theme/app_colors.dart';
 import 'package:note_it/ui/theme/font_family.dart';
 import 'package:note_it/util/runtime_constants.dart';
@@ -110,7 +111,14 @@ class _SettingsPage extends StatelessWidget {
                   onPressed: () {
                     //            prepareNotesInJson();
                     // adding dialog to show information about backup
-                    context.read<SettingsBloc>().add(BackupNotesEvent());
+                    showModalBottomSheet(context: context,
+                        builder: (ctx) => BottomSheetInformation(
+                            information:  'Note.it provides you a backup file with extension .nbk . this file represents all your notes '
+                                'in encrypted format and can be used to restore all your current notes. If you are planning to '
+                                'change your smartphone or planing to reset it or planning to uninstall this app then you can '
+                                'save this backup file to drive or anywhere else then you can use it later to restore your notes.',
+                          onDismissed: () => context.read<SettingsBloc>().add(BackupNotesEvent()),
+                        ));
                   },
                   child: Row(
                     children: [
@@ -125,7 +133,13 @@ class _SettingsPage extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    context.read<SettingsBloc>().add(RestoreNotesEvent());
+                    showModalBottomSheet(context: context, builder: (ctx) => BottomSheetInformation(
+                        information: 'You can select a backup file to restore your notes. If you have used Note.it in the past '
+                            'and generated that backup file using the backup notes button, then you can select that file from '
+                            'your google drive or from anywhere else. Click select button to select that file (with .nbk) extension '
+                            'to restore your notes',
+                        onDismissed: () => context.read<SettingsBloc>().add(RestoreNotesEvent())));
+
                   },
                   child: Row(
                     children: [
