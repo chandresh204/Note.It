@@ -27,7 +27,13 @@ class ConfirmationDialog extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(confirmationText, style: AppTextStyles.heading2),
+            Row(
+              children: [
+                Text(confirmationText, style: AppTextStyles.heading2),
+                Expanded(child: SizedBox()),
+                IconButton(onPressed: () => Navigator.pop(context) , icon: Icon(Icons.close))
+              ],
+            ),
             SizedBox(height: 16),
             Row(
               mainAxisSize: MainAxisSize.min,

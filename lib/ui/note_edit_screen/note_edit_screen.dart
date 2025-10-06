@@ -132,14 +132,15 @@ class _NoteEditPage extends StatelessWidget {
         if(!didPop && context.read<NoteEditBloc>().isTextChanged()) {
           showDialog(context: context, builder: (ctx) {
             return ConfirmationDialog(
-              confirmationText: 'Do you want to discard this changes and close editor?',
-              positiveButtonText: 'Yes',
+              confirmationText: 'Save the change?',
+              positiveButtonText: 'Yes, Save & Close',
               positiveButtonClick: () {
-                Navigator.pop(context);
+                context.read<NoteEditBloc>().add(SaveNoteEvent(_controller.text));
                 Navigator.pop(context);
               },
-              negativeButtonText: 'No, Stay',
+              negativeButtonText: 'No, Discard',
               negativeButtonClick: () {
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
             );
