@@ -25,14 +25,17 @@ class _EnterPasswordDialogState extends State<EnterPasswordDialog> {
           children: [
             Text('Enter Your Password', style: AppTextStyles.heading2),
             SizedBox(height: 16),
-            TextField(
-              textAlign: TextAlign.center,
-              obscureText: true,
-              controller: _controller,
-              decoration: InputDecoration(
-                border: OutlineInputBorder()
+            SizedBox(
+              width: 160,
+              child: TextField(
+                textAlign: TextAlign.center,
+                obscureText: true,
+                controller: _controller,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder()
+                ),
+                keyboardType: TextInputType.number,
               ),
-              keyboardType: TextInputType.number,
             ),
             SizedBox(height: 16),
             Row(

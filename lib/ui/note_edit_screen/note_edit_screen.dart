@@ -171,7 +171,7 @@ class _NoteEditPage extends StatelessWidget {
                 controller: _controller,
                 autofocus: true,
                 style: AppTextStyles.body.copyWith(
-                  fontSize: 20*RuntimeConstants.currentTextScaler
+                  fontSize: 18*RuntimeConstants.currentTextScaler
                 ),
               ),
             ),
