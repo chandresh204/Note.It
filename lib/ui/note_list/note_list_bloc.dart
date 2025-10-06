@@ -72,8 +72,8 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   }
 
   _onNoteListSearch(NoteListSearch event, Emitter<NoteListState> emit) async {
-    _searchQuery = event.query;
-    final searchedNotes = await _noteRepository.searchNotes(event.query) ?? List.empty();
+    _searchQuery = event.query.trim();
+    final searchedNotes = await _noteRepository.searchNotes(_searchQuery) ?? List.empty();
     _currentNoteList = searchedNotes;
     add(NoteListUpdatedEvent(searchedNotes.toNoteItem()));
   }
