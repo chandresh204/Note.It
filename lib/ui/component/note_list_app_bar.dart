@@ -50,7 +50,6 @@ class _NoteListAppBarState extends State<NoteListAppBar> {
     if(_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       widget.onSearchQuery(query);
-      print('Searching for: $query');
     });
   }
 

@@ -17,7 +17,6 @@ class MigrationRepository {
   Future<void> performMigration() async {
     while(!isInitialized)  {
       await Future.delayed(Duration(milliseconds: 100), () {
-        print('waiting for initialization');
       });
     }
     final lastAppVersion = _prefs.getInt(SharedPreferencesConstants.lastAppVersionPrefString);

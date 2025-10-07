@@ -5,6 +5,7 @@ import 'package:note_it/ui/theme/themes.dart';
 import 'package:note_it/util/extensions.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:in_app_update/in_app_update.dart';
 
 import '../../data/encryption/encrypt_decrypt.dart';
 import '../../repository/migration_repository.dart';
@@ -29,6 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _checkForUpdate();
     _asyncInit();
   }
 
@@ -84,5 +86,14 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      if (info.updateAvailability ==
+          UpdateAvailability.updateAvailable) {
+        InAppUpdate.startFlexibleUpdate();
+      }
+    });
   }
 }

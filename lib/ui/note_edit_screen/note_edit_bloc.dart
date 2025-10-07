@@ -83,7 +83,6 @@ class NoteEditBloc extends Bloc<NoteEditEvent, NoteEditState> {
         isTextChanged = _editableNote!.note != _editedText;
       }
     }
-    print('isTextChanged : $_editedText and ${_editableNote?.note}');
     return isTextChanged;
   }
 }

@@ -17,7 +17,7 @@ void setupLocators() {
   getIt.registerLazySingleton<LocalDataSource>(() =>
       LocalDataSourceImpl(getIt<NoteDatabase>()));
   getIt.registerLazySingleton<NoteRepository>(() =>
-      NoteRepository(getIt<LocalDataSource>(), getIt<NativeDataSource>()));
+      NoteRepository(getIt<LocalDataSource>()));
   getIt.registerLazySingleton<BackupRepository>(() =>
       BackupRepository(getIt<LocalDataSource>()));
   getIt.registerLazySingleton<SettingsRepository>(() => SettingsRepository());

@@ -39,7 +39,6 @@ class SecureNoteBloc extends Bloc<SecureNoteEvent, SecureNoteState> {
   }
 
   _onRefreshListEvent(RefreshListEvent event, Emitter<SecureNoteState> emit) {
-    print('secure timer refresh');
     if(_currentNoteList != null) {
       add(NoteListUpdatedEvent(_currentNoteList!.toNoteItem()));
     }
@@ -57,7 +56,6 @@ class SecureNoteBloc extends Bloc<SecureNoteEvent, SecureNoteState> {
   }
 
   void startTimer() {
-    print('secure timer started');
     _timer = Timer.periodic(const Duration(seconds: 30), (_) => add(RefreshListEvent()));
   }
 
@@ -66,7 +64,6 @@ class SecureNoteBloc extends Bloc<SecureNoteEvent, SecureNoteState> {
   @override
   Future<void> close() {
     _timer.cancel();
-    print('secure timer stopped');
     _noteSubscription?.cancel();
     return super.close();
   }

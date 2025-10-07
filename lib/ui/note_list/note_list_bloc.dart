@@ -41,14 +41,12 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
 
   _toggleTimer() async {
     final editedAfter = await _noteRepository.getNotesEditedAfterTime(DateTime.now().millisecondsSinceEpoch - 3600000);
-    print("editedAfter >> $editedAfter");
     if(editedAfter > 0) {
       if(!_timerRunning) {
         _timerRunning = true;
         startTimer();
       }
     } else {
-      print("timer not required now");
       if(_timerRunning) {
         _timer.cancel();
       }
@@ -60,7 +58,6 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   }
 
   _onRefreshListEvent(RefreshListEvent event, Emitter<NoteListState> emit) {
-    print('timer refresh');
     if(_currentNoteList != null) {
       add(NoteListUpdatedEvent(_currentNoteList!.toNoteItem()));
     }
@@ -89,7 +86,6 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   }
 
   void startTimer() {
-    print('timer started');
     _timer = Timer.periodic(const Duration(seconds: 30), (_) => add(RefreshListEvent()));
   }
 
@@ -101,7 +97,6 @@ class NoteListBloc extends Bloc<NoteListEvent, NoteListState> {
   Future<void> close() {
     if(_timer.isActive) {
       _timer.cancel();
-      print('timer stopped');
     }
     return super.close();
   }

@@ -1,19 +1,16 @@
 import '../data/encryption/encrypt_decrypt.dart';
 
 import '../data/local/local_data_source.dart';
-import '../data/native/constants.dart';
-import '../data/native/native_date_source.dart';
 import '../database/note_database.dart';
 
 class NoteRepository {
   final LocalDataSource _localDataSource;
-  final NativeDataSource _nativeDataSource;
 
-  NoteRepository(this._localDataSource, this._nativeDataSource);
+  NoteRepository(this._localDataSource);
 
   addNote(String noteText, bool isEncrypt) async {
     final saveText = isEncrypt ? EncDec.getEncryptedText(noteText) : noteText;
-    final added = await _localDataSource.insertNote(saveText, isEncrypt);
+    await _localDataSource.insertNote(saveText, isEncrypt);
   }
 
   Future<int> addMultipleNotes(List<NoteData> notes) async {
@@ -28,11 +25,11 @@ class NoteRepository {
   Future<NoteData?> getNoteById(int id) => _localDataSource.getNoteById(id);
 
   updateNote(NoteData note) async {
-    final updated = _localDataSource.updateNote(note);
+    _localDataSource.updateNote(note);
   }
 
   deleteNote(int id) async {
-    final deleted = _localDataSource.deleteNote(id);
+    _localDataSource.deleteNote(id);
   }
 
   Future<List<NoteData>?> searchNotes(String query) async =>

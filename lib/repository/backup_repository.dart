@@ -69,7 +69,6 @@ class BackupRepository {
       try {
         final backedUpFromAppVersion = json.decode(jsonString)[Constants.backUpAppVersionJson] as int;
         // perform operation on backed up from version
-        print('backed up from version >>> $backedUpFromAppVersion');
         if(backedUpFromAppVersion > int.parse(pInfo.buildNumber)) {
           print('backed up from future release....$backedUpFromAppVersion');
         }

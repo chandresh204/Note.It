@@ -48,6 +48,7 @@ dependencies:
   encrypt: ^5.0.3
   share_plus: ^11.1.0
   package_info_plus: ^9.0.0
+  in_app_update: ^4.2.5
   interactive_text:
     path: package/interactive_text
 

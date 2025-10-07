@@ -59,7 +59,6 @@ class _SettingsPage extends StatelessWidget {
           if (state is BackupDataReceivedState) {
             getApplicationDocumentsDirectory().then((dir) {
               final file = File('${dir.path}/noteit.nbk');
-              print('file at: $file');
               file.writeAsString(state.backupData).then((value) {
                 SharePlus.instance
                     .share(
