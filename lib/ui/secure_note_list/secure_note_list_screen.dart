@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '/ui/change_password/change_password_dialog.dart';
@@ -5,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../di/injector.dart';
 import '../../repository/note_repository.dart';
+import '../../util/constants.dart';
 import '../dialog/bottom_sheet_delete_confirm.dart';
 import '../dialog/bottom_sheet_note_actions.dart';
 import '../component/note_tile.dart';
@@ -37,8 +40,18 @@ class _SecureNoteListPageState extends State<_SecureNoteListPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('Note.It - Secure'),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(Constants.appBarAlpha),
+        flexibleSpace: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+        ),
         actions: [IconButton(onPressed: () {
           showGeneralDialog(context: context, pageBuilder: (ctx,a1,a2) => ChangePasswordDialog());
         }, icon: Icon(Icons.lock_reset))],

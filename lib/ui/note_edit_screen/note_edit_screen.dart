@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +9,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../di/injector.dart';
 import '../../repository/note_repository.dart';
+import '../../util/constants.dart';
 import '../component/my_interactive_text.dart';
 import '../dialog/confirmation_dialog.dart';
 import '../routes.dart';
@@ -55,20 +58,30 @@ class _NoteReadOnly extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('Note.It - Read Only'),
-        shadowColor: RuntimeConstants.lightThemeData.primaryColor,
-        scrolledUnderElevation: 12,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(Constants.appBarAlpha),
+        flexibleSpace: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+        ),
+        // shadowColor: RuntimeConstants.lightThemeData.primaryColor,
+        // scrolledUnderElevation: 12,
         actions: appBarReadOnlyActions(noteText),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 50),
-                child: MyInteractiveText(text: noteText)
-            ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(
+              top: 120,
+              bottom: 150, left: 16, right: 16),
+          child: SizedBox(
+            width: double.infinity,
+              child: MyInteractiveText(text: noteText)
           ),
         ),
       ),
@@ -152,27 +165,37 @@ class _NoteEditPage extends StatelessWidget {
         }
       },
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: Text('Note.It - Editor'),
-          shadowColor: Colors.blue,
-          scrolledUnderElevation: 12,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(Constants.appBarAlpha),
+          flexibleSpace: ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),
+              child: Container(
+                color: Colors.transparent,
+              ),
+            ),
+          ),
           actions: appBarEditingActions(),
         ),
-        body: SafeArea(
+        body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 50),
-              child: TextField(
-                expands: true,
-                maxLines: null,
-                minLines: null,
-                decoration: null,
-                controller: _controller,
-                autofocus: true,
-                style: AppTextStyles.body.copyWith(
-                  fontSize: 18*RuntimeConstants.currentTextScaler
-                ),
+            padding: const EdgeInsets.only(
+              top: 120,
+              bottom: 150,
+              left: 16,
+              right: 16
+            ),
+            child: TextField(
+              expands: true,
+              maxLines: null,
+              minLines: null,
+              decoration: null,
+              controller: _controller,
+              autofocus: true,
+              style: AppTextStyles.body.copyWith(
+                fontSize: 18*RuntimeConstants.currentTextScaler
               ),
             ),
           ),

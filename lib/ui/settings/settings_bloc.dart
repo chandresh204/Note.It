@@ -24,14 +24,17 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   _restoreNotes(RestoreNotesEvent event, emit) {
-    FilePicker.platform.pickFiles(allowMultiple: false).then((files) async {
-      if (files != null) {
-        final restoreFile = File(files.files.first.path!);
+    print('not implemented _restore notes');
+    FilePicker.pickFile().then((file) async {
+      if(file != null && file.path != null) {
+        final restoreFile = File(file.path!);
         final restored = await _backupRepository.restoreNotesFromFile(restoreFile);
         final msg = restored >= 0
           ? '$restored notes restored'
-            : 'Something went wrong when restoring notes';
+          : 'Something went wrong when restoring notes';
         add(ShowSnackbarEvent(msg));
+      } else {
+        emit(SnackBarInState('Error file selection'));
       }
     });
   }

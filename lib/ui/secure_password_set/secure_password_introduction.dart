@@ -1,8 +1,10 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../di/injector.dart';
 import '../../repository/settings_repository.dart';
+import '../../util/constants.dart';
 import '../component/text_icon_button.dart';
 import '../dialog/dialog_with_icon.dart';
 import '../theme/text_styles.dart';
@@ -56,7 +58,18 @@ class _SecureSettingsPageState extends State<_SecureSettingsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(Constants.appBarAlpha),
+        flexibleSpace: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+        ),
+      ),
       body: BlocListener<SecureSettingsBloc, SecureSettingsState>(
         listener: (ctx, state) {
           if (state is SecureSettingsIdle) {

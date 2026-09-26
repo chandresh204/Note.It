@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,7 +43,19 @@ class _SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Settings')),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Text('Settings'),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(Constants.appBarAlpha),
+        flexibleSpace: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+        ),
+      ),
       body: BlocConsumer<SettingsBloc, SettingsState>(
         builder: (ctx, state) {
           if (state is SettingStateIdle) {

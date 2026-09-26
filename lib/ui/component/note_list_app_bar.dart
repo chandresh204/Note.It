@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:note_it/util/runtime_constants.dart';
 
+import '../../util/constants.dart';
 import '../routes.dart';
 
 class NoteListAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -56,6 +57,18 @@ class _NoteListAppBarState extends State<NoteListAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor
+      .withAlpha(Constants.appBarAlpha),
+
+      // 3. Inject the blur filter beneath the AppBar content
+      flexibleSpace: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),
+          child: Container(
+            color: Colors.transparent,
+          ),
+        ),
+      ),
       title:
           _isSearching
               ? TextField(
@@ -68,9 +81,9 @@ class _NoteListAppBarState extends State<NoteListAppBar> {
                 onChanged: _onSearchChanged,
               )
               : Text('My Notes'),
-      shadowColor: RuntimeConstants.lightThemeData.primaryColor,
-      scrolledUnderElevation: 20.0,
-      animateColor: true,
+      // shadowColor: RuntimeConstants.lightThemeData.primaryColor,
+      // scrolledUnderElevation: 20.0,
+      // animateColor: true,
       actions:
           _isSearching
               ? [IconButton(onPressed: _stopSearch, icon: Icon(Icons.clear))]

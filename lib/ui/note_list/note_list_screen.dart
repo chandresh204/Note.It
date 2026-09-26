@@ -42,6 +42,7 @@ class _NoteListPageState extends State<_NoteListPage> with SingleTickerProviderS
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
         appBar: NoteListAppBar(
           cancelSearch: context.read<NoteListBloc>().getSearchCancelStream(),
           onSearchQuery: (query) {

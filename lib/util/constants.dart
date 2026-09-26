@@ -5,4 +5,8 @@ class Constants {
   static const backUpNotesJson = 'notes';
   static const backUpPasswordJson = 'password';
   static const backUpAppVersionJson = 'appVersion';
+
+  // app bar
+  static const appBarAlpha = 100;
+  static const appBarBlur = 10.0;
 }
