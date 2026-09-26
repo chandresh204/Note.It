@@ -10,4 +10,7 @@ class RuntimeConstants {
   static FontFamily selectedFontFamily = FontFamily.raleway;
   static ThemeData lightThemeData = createLightTheme();
   static ThemeData darkThemeData = createDarkTheme();
+
+  static bool isBlurEffectEnabled = true;
+  static int appBarAlpha = 100;
 }

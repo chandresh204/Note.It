@@ -8,6 +8,7 @@ abstract class SettingsState {}
 class SettingStateIdle extends SettingsState {
   double textScaler = RuntimeConstants.currentTextScaler - Constants.textScalerAndSliderDiff;
   AppColors selectedColor = RuntimeConstants.selectedAppColor;
+  bool isBlurEnabled = RuntimeConstants.isBlurEffectEnabled;
   SettingStateIdle();
 }
 

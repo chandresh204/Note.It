@@ -61,15 +61,15 @@ class _NoteReadOnly extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('Note.It - Read Only'),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(Constants.appBarAlpha),
-        flexibleSpace: ClipRect(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(RuntimeConstants.appBarAlpha),
+        flexibleSpace: RuntimeConstants.isBlurEffectEnabled ? ClipRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),
             child: Container(
               color: Colors.transparent,
             ),
           ),
-        ),
+        ) : null,
         // shadowColor: RuntimeConstants.lightThemeData.primaryColor,
         // scrolledUnderElevation: 12,
         actions: appBarReadOnlyActions(noteText),
@@ -168,15 +168,15 @@ class _NoteEditPage extends StatelessWidget {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: Text('Note.It - Editor'),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(Constants.appBarAlpha),
-          flexibleSpace: ClipRect(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(RuntimeConstants.appBarAlpha),
+          flexibleSpace: RuntimeConstants.isBlurEffectEnabled ? ClipRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),
               child: Container(
                 color: Colors.transparent,
               ),
             ),
-          ),
+          ) : null,
           actions: appBarEditingActions(),
         ),
         body: SingleChildScrollView(

@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_it/util/runtime_constants.dart';
 
 import '../../di/injector.dart';
 import '../../repository/settings_repository.dart';
@@ -60,7 +61,7 @@ class _SecureSettingsPageState extends State<_SecureSettingsPage>
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(Constants.appBarAlpha),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(RuntimeConstants.appBarAlpha),
         flexibleSpace: ClipRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),

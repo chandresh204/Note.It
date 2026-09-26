@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:note_it/ui/theme/app_colors.dart';
 import 'package:note_it/ui/theme/font_family.dart';
 import 'package:note_it/ui/theme/themes.dart';
+import 'package:note_it/util/constants.dart';
 import 'package:note_it/util/extensions.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,6 +59,9 @@ class _SplashScreenState extends State<SplashScreen> {
       RuntimeConstants.selectedAppColor = getAppColorFromName(appColor);
       RuntimeConstants.lightThemeData = createLightTheme();
       RuntimeConstants.darkThemeData = createDarkTheme();
+      final isBlurEffect = prefs.getBool(SharedPreferencesConstants.blurEffectPrefString) ?? true;
+      RuntimeConstants.isBlurEffectEnabled = isBlurEffect;
+      RuntimeConstants.appBarAlpha = isBlurEffect ? Constants.appBarAlphaInBlur : Constants.appBarAlphaWithoutBlur;
       widget.onThemeSet();
       Future.delayed(Duration(seconds: 1), () {
         if(mounted) {

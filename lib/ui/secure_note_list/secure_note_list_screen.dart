@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_it/util/runtime_constants.dart';
 import '/ui/change_password/change_password_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -43,15 +44,15 @@ class _SecureNoteListPageState extends State<_SecureNoteListPage>
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('Note.It - Secure'),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(Constants.appBarAlpha),
-        flexibleSpace: ClipRect(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(RuntimeConstants.appBarAlpha),
+        flexibleSpace: RuntimeConstants.isBlurEffectEnabled ? ClipRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),
             child: Container(
               color: Colors.transparent,
             ),
           ),
-        ),
+        ) : null,
         actions: [IconButton(onPressed: () {
           showGeneralDialog(context: context, pageBuilder: (ctx,a1,a2) => ChangePasswordDialog());
         }, icon: Icon(Icons.lock_reset))],

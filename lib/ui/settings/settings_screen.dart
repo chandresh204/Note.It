@@ -46,15 +46,18 @@ class _SettingsPage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('Settings'),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor.withAlpha(Constants.appBarAlpha),
-        flexibleSpace: ClipRect(
+        backgroundColor: Theme.of(
+          context,
+        ).scaffoldBackgroundColor.withAlpha(RuntimeConstants.appBarAlpha),
+        flexibleSpace: RuntimeConstants.isBlurEffectEnabled ? ClipRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),
-            child: Container(
-              color: Colors.transparent,
+            filter: ImageFilter.blur(
+              sigmaX: Constants.appBarBlur,
+              sigmaY: Constants.appBarBlur,
             ),
+            child: Container(color: Colors.transparent),
           ),
-        ),
+        ) : null,
       ),
       body: BlocConsumer<SettingsBloc, SettingsState>(
         builder: (ctx, state) {
@@ -123,14 +126,19 @@ class _SettingsPage extends StatelessWidget {
                   onPressed: () {
                     //            prepareNotesInJson();
                     // adding dialog to show information about backup
-                    showModalBottomSheet(context: context,
-                        builder: (ctx) => BottomSheetInformation(
-                            information:  'Note.it provides you a backup file with extension .nbk . this file represents all your notes '
-                                'in encrypted format and can be used to restore all your current notes. If you are planning to '
-                                'change your smartphone or planing to reset it or planning to uninstall this app then you can '
-                                'save this backup file to drive or anywhere else then you can use it later to restore your notes.',
-                          onDismissed: () => context.read<SettingsBloc>().add(BackupNotesEvent()),
-                        ));
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (ctx) => BottomSheetInformation(
+                        information:
+                            'Note.it provides you a backup file with extension .nbk . this file represents all your notes '
+                            'in encrypted format and can be used to restore all your current notes. If you are planning to '
+                            'change your smartphone or planing to reset it or planning to uninstall this app then you can '
+                            'save this backup file to drive or anywhere else then you can use it later to restore your notes.',
+                        onDismissed: () => context.read<SettingsBloc>().add(
+                          BackupNotesEvent(),
+                        ),
+                      ),
+                    );
                   },
                   child: Row(
                     children: [
@@ -145,13 +153,19 @@ class _SettingsPage extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    showModalBottomSheet(context: context, builder: (ctx) => BottomSheetInformation(
-                        information: 'You can select a backup file to restore your notes. If you have used Note.it in the past '
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (ctx) => BottomSheetInformation(
+                        information:
+                            'You can select a backup file to restore your notes. If you have used Note.it in the past '
                             'and generated that backup file using the backup notes button, then you can select that file from '
                             'your google drive or from anywhere else. Click select button to select that file (with .nbk) extension '
                             'to restore your notes',
-                        onDismissed: () => context.read<SettingsBloc>().add(RestoreNotesEvent())));
-
+                        onDismissed: () => context.read<SettingsBloc>().add(
+                          RestoreNotesEvent(),
+                        ),
+                      ),
+                    );
                   },
                   child: Row(
                     children: [
@@ -212,7 +226,8 @@ class _SettingsPage extends StatelessWidget {
             height: 300,
             child: GridView(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: (MediaQuery.of(context).size.width/150).toInt(),
+                crossAxisCount: (MediaQuery.of(context).size.width / 150)
+                    .toInt(),
                 childAspectRatio: 3,
               ),
               controller: scrollController,
@@ -235,21 +250,47 @@ class _SettingsPage extends StatelessWidget {
           SizedBox(height: widgetSpacing),
           Row(
             children: [
-              Expanded(child: TextIconButton(icon: Icons.share, text: 'Share App', onClick: () {
-                SharePlus.instance.share(
-                  ShareParams(
-                    text: 'Hello, Im using Note.It. It is a simple app to keep your notes. '
-                            'You can also try it by clicking on the link: ${Constants.playStoreUrl}'
-                  )
-                );
-              })),
-              SizedBox(width: 8),
-              Expanded(child: TextIconButton(icon: Icons.star, text: 'Rate App', onClick: () {
-                launchUrl(Uri.parse(Constants.playStoreUrl));
-              })),
+              Expanded(child: Text('Blur Effect', style: AppTextStyles.heading2)),
+              Switch(
+                value: state.isBlurEnabled,
+                onChanged: (b) => context.read<SettingsBloc>().add(
+                  UpdateBlurEffectEvent(isEnable: b),
+                ),
+              ),
             ],
           ),
-          SizedBox(height: 100)
+          Divider(),
+          SizedBox(height: widgetSpacing),
+          Row(
+            children: [
+              Expanded(
+                child: TextIconButton(
+                  icon: Icons.share,
+                  text: 'Share App',
+                  onClick: () {
+                    SharePlus.instance.share(
+                      ShareParams(
+                        text:
+                            'Hello, Im using Note.It. It is a simple app to keep your notes. '
+                            'You can also try it by clicking on the link: ${Constants.playStoreUrl}',
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(width: 8),
+              Expanded(
+                child: TextIconButton(
+                  icon: Icons.star,
+                  text: 'Rate App',
+                  onClick: () {
+                    launchUrl(Uri.parse(Constants.playStoreUrl));
+                  },
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 100),
         ],
       ),
     );

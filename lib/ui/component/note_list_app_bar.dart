@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:note_it/util/runtime_constants.dart';
 
 import '../../util/constants.dart';
 import '../routes.dart';
@@ -58,17 +59,17 @@ class _NoteListAppBarState extends State<NoteListAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor
-      .withAlpha(Constants.appBarAlpha),
+      .withAlpha(RuntimeConstants.appBarAlpha),
 
       // 3. Inject the blur filter beneath the AppBar content
-      flexibleSpace: ClipRect(
+      flexibleSpace: RuntimeConstants.isBlurEffectEnabled ? ClipRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: Constants.appBarBlur, sigmaY: Constants.appBarBlur),
           child: Container(
             color: Colors.transparent,
           ),
         ),
-      ),
+      ) : null,
       title:
           _isSearching
               ? TextField(

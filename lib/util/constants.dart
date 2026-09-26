@@ -7,6 +7,7 @@ class Constants {
   static const backUpAppVersionJson = 'appVersion';
 
   // app bar
-  static const appBarAlpha = 100;
   static const appBarBlur = 10.0;
+  static const appBarAlphaInBlur = 100;
+  static const appBarAlphaWithoutBlur = 230;
 }

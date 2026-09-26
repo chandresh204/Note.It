@@ -40,4 +40,8 @@ class SettingsRepository {
   void updateFontFamily(FontFamily f) {
     _prefs.setString(SharedPreferencesConstants.fontFamilyPrefString, f.fontName);
   }
+
+  void updateBlueEffect(bool isEnable) {
+    _prefs.setBool(SharedPreferencesConstants.blurEffectPrefString, isEnable);
+  }
 }

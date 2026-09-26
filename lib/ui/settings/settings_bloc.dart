@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_it/ui/theme/themes.dart';
+import 'package:note_it/util/constants.dart';
 
 import '/ui/settings/settings_event.dart';
 import '/ui/settings/settings_state.dart';
@@ -21,10 +22,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<UpdateTextSizeEvent>(_updateTextScaler);
     on<UpdateThemeColorEvent>(_updateThemeColor);
     on<UpdateFontFamilyEvent>(_updateFontFamily);
+    on<UpdateBlurEffectEvent>(_onToggleBlurEffect);
   }
 
   _restoreNotes(RestoreNotesEvent event, emit) {
-    print('not implemented _restore notes');
     FilePicker.pickFile().then((file) async {
       if(file != null && file.path != null) {
         final restoreFile = File(file.path!);
@@ -73,6 +74,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     RuntimeConstants.darkThemeData = createDarkTheme();
     emit(SettingStateIdle());
     _settingsRepository.updateFontFamily(event.font);
+    emit(ThemeColorChanged());
+  }
+  
+  _onToggleBlurEffect(UpdateBlurEffectEvent event, emit) {
+    RuntimeConstants.isBlurEffectEnabled = event.isEnable;
+    RuntimeConstants.appBarAlpha = event.isEnable ? Constants.appBarAlphaInBlur : Constants.appBarAlphaWithoutBlur;
+    RuntimeConstants.lightThemeData = createLightTheme();
+    RuntimeConstants.darkThemeData = createDarkTheme();
+    emit(SettingStateIdle());
+    _settingsRepository.updateBlueEffect(event.isEnable);
     emit(ThemeColorChanged());
   }
 

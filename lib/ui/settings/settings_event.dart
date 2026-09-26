@@ -27,3 +27,8 @@ class UpdateFontFamilyEvent extends SettingsEvent {
   final FontFamily font;
   UpdateFontFamilyEvent({required this.font});
 }
+
+class UpdateBlurEffectEvent extends SettingsEvent {
+  final bool isEnable;
+  UpdateBlurEffectEvent({required this.isEnable});
+}

@@ -4,4 +4,5 @@ class SharedPreferencesConstants {
   static const String textScaleFactorPrefString = 'textScaleFactor';
   static const String themeColorPrefString = 'themeColor';
   static const String fontFamilyPrefString = 'fontFamily';
+  static const String blurEffectPrefString = 'isBlurEnabled';
 }
