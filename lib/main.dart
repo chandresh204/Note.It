@@ -1,62 +1,50 @@
 import 'package:flutter/material.dart';
-import 'themes/theme.dart';
-import 'ui/spalsh_screen.dart';
+import 'package:note_it/util/runtime_constants.dart';
+import '/ui/note_edit_screen/note_edit_screen.dart';
+import '/ui/note_list/note_list_screen.dart';
+import '/ui/routes.dart';
+import '/ui/secure_note_list/secure_note_list_screen.dart';
+import '/ui/settings/settings_screen.dart';
+
+import 'di/injector.dart';
+import 'ui/secure_password_set/secure_password_introduction.dart';
+import 'ui/splash_screen/splash_screen.dart';
 
 void main() {
-  return runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  setupLocators();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-  static const String DB_NAME ='note-database.db';
-  static var appReady = false;
-
-  static _MyAppState? of(BuildContext context) =>
-      context.findRootAncestorStateOfType<_MyAppState>();
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.light;
-  MaterialColor _primarySwatch = Colors.purple;
-  String _font = '';
-  void changeTheme(bool isDarkMode, MaterialColor primarySwatch, String fontName) {
-      setState(() {
-        if (isDarkMode) {
-          _themeMode = ThemeMode.dark;
-        } else {
-          _themeMode = ThemeMode.light;
-        }
-        _primarySwatch = primarySwatch;
-        _font = fontName;
-      });
-  }
-
 
   @override
   Widget build(BuildContext context) {
-    MyTheme.initializeColors();
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'MyApp',
-      themeMode: _themeMode,
-      theme: ThemeData(
-        useMaterial3: false,
-        primarySwatch: _primarySwatch,
-        fontFamily: _font,
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: false,
-        brightness: Brightness.dark,
-        fontFamily: _font,
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          foregroundColor: Colors.white,
-        ),
-        primarySwatch: _primarySwatch,
-      ),
-      home: const SplashScreen(),
+      title: 'Notes demo app',
+      initialRoute: Routes.splashScreen,
+      routes: {
+        Routes.splashScreen : (context) => SplashScreen(onThemeSet: () {
+          setState(() {});
+        },),
+        Routes.listScreen : (context) => const NoteListScreen(),
+        Routes.editScreen : (context) => const NoteEditScreen(),
+        Routes.secureIntroductionScreen : (context) => const SecurePasswordIntroduction(),
+        Routes.settingsScreen : (context) => SettingsScreen(onThemeColorChanged: () {
+          setState(() {});
+        },),
+        Routes.secureListScreen : (context) => const SecureNoteListScreen()
+      },
+      theme: RuntimeConstants.lightThemeData,
+      darkTheme: RuntimeConstants.darkThemeData,
+      themeMode: ThemeMode.system,
     );
   }
 }
